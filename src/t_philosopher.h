@@ -2,6 +2,7 @@
 
 #include <pthread.h>
 #include "t_config.h"
+#include "t_error.h"
 
 typedef struct s_philosopher t_philosopher;
 struct s_philosopher
@@ -13,5 +14,5 @@ struct s_philosopher
     // mutex* right_fork;
 };
 
-void* daily_routine(void* arg);
 t_philosopher philosopher_new(u32 index, const t_config* cfg);
+t_error philosopher_start(t_philosopher* self);
