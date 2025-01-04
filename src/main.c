@@ -44,7 +44,7 @@ t_error start(t_state* state)
 
     for (u32 i = 0; i < state->cfg->n_philosophers; i++)
     {
-        pthread_join(*(state->philosophers[i].thread), NULL);  // fallible
+        pthread_join(state->philosophers[i].thread, NULL);  // fallible
     }
 
     return NO_ERROR;
