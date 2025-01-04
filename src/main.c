@@ -29,10 +29,7 @@ t_state init(const t_config* cfg)
         return (t_state){0};
 
     for (u32 i = 0; i < out.cfg->n_philosophers; i++)
-    {
-        out.philosophers[i] =
-            (t_philosopher){.thread = NULL, .index = i, .cfg = cfg};
-    }
+        out.philosophers[i] = philosopher_new(i, cfg);
 
     return out;
 }

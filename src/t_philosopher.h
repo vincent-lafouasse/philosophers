@@ -14,3 +14,4 @@ struct s_philosopher
 };
 
 void* daily_routine(void* arg);
+t_philosopher philosopher_new(u32 index, const t_config* cfg);
