@@ -23,7 +23,8 @@ t_config load_config(int ac, char* av[])
     return (t_config){.n_philosophers = 3, .time_to_sleep_us = 1000000};
 }
 
-typedef struct {
+typedef struct
+{
     pthread_t* thread;
     u32 index;
     const t_config* cfg;
@@ -42,12 +43,16 @@ t_state init(const t_config* cfg)
 {
     t_state out;
 
-    out = (t_state){.philosophers = malloc(cfg->n_philosophers * sizeof(Philosopher)), .cfg = cfg};
+    out = (t_state){
+        .philosophers = malloc(cfg->n_philosophers * sizeof(Philosopher)),
+        .cfg = cfg};
     if (!out.philosophers)
         return (t_state){0};
 
-    for (u32 i = 0; i < out.cfg->n_philosophers; i++) {
-        out.philosophers[i] = (Philosopher){.thread=NULL, .index = i, .cfg = cfg};
+    for (u32 i = 0; i < out.cfg->n_philosophers; i++)
+    {
+        out.philosophers[i] =
+            (Philosopher){.thread = NULL, .index = i, .cfg = cfg};
     }
 
     return out;
