@@ -39,16 +39,12 @@ t_error start(t_state* state)
 
     for (u32 i = 0; i < state->cfg->n_philosophers; i++)
     {
-        err = philosopher_start(state->philosophers + i);
-        if (err != NO_ERROR)
-        {
-            return err;  // should probably cleanup also
-        }
+        err = philosopher_start(state->philosophers + i); // fallible
     }
 
     for (u32 i = 0; i < state->cfg->n_philosophers; i++)
     {
-        pthread_join(*(state->philosophers[i].thread), NULL);
+        pthread_join(*(state->philosophers[i].thread), NULL); // fallible
     }
 
     return NO_ERROR;
