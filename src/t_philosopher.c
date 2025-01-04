@@ -7,7 +7,8 @@ t_philosopher philosopher_new(u32 index, const t_config* cfg)
     return (t_philosopher){.thread = NULL, .index = index, .cfg = cfg};
 }
 
-void* thread_routine(void* arg) {
+void* thread_routine(void* arg)
+{
     (void)arg;
     printf("thread starting\n");
     return NULL;
