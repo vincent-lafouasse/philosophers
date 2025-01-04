@@ -12,3 +12,4 @@ struct s_config
 };
 
 t_config load_config(int ac, char* av[]);
+void log_config(const t_config* cfg);

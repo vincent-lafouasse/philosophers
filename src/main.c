@@ -48,6 +48,8 @@ t_state init(const t_config* cfg)
 int main(int ac, char* av[])
 {
     const t_config cfg = load_config(ac, av);
+    log_config(&cfg);
+
     t_state state = init(&cfg);
 }
 
