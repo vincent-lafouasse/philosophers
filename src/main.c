@@ -1,5 +1,4 @@
 #include <pthread.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -12,7 +11,20 @@ typedef struct {
     const t_config* cfg;
 } t_state;
 
-t_state init(const t_config* cfg) {
+static t_state init(const t_config* cfg);
+static t_error start(t_state* state);
+static void cleanup(t_state* state);
+
+int main(int ac, char* av[]) {
+    const t_config cfg = load_config(ac, av);
+    log_config(&cfg);
+
+    t_state state = init(&cfg);
+    start(&state);
+    cleanup(&state);
+}
+
+static t_state init(const t_config* cfg) {
     t_state out;
 
     out = (t_state){
@@ -35,7 +47,7 @@ t_state init(const t_config* cfg) {
     return out;
 }
 
-t_error start(t_state* state) {
+static t_error start(t_state* state) {
     for (u32 i = 0; i < state->cfg->n_philosophers; i++) {
         philosopher_start(state->philosophers + i);  // fallible
     }
@@ -47,15 +59,6 @@ t_error start(t_state* state) {
     return NO_ERROR;
 }
 
-void cleanup(t_state* state) {
+static void cleanup(t_state* state) {
     (void)state;
-}
-
-int main(int ac, char* av[]) {
-    const t_config cfg = load_config(ac, av);
-    log_config(&cfg);
-
-    t_state state = init(&cfg);
-    start(&state);
-    cleanup(&state);
 }
