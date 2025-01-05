@@ -29,18 +29,18 @@ t_state init(const t_config* cfg) {
         return (t_state){0};
     }
 
+    for (u32 i = 0; i < cfg->n_philosophers; i++) {
+        pthread_mutex_init(out.forks + i, NULL);
+    }
+
     for (u32 i = 0; i < out.cfg->n_philosophers; i++)
-        out.philosophers[i] = philosopher_new(i, cfg);
+        out.philosophers[i] = philosopher_new(i, cfg, out.forks);
 
     return out;
 }
 
 t_error start(t_state* state) {
     t_error err;
-
-    for (u32 i = 0; i < state->cfg->n_philosophers; i++) {
-        pthread_mutex_init(state->forks + i, NULL);
-    }
 
     for (u32 i = 0; i < state->cfg->n_philosophers; i++) {
         err = philosopher_start(state->philosophers + i);  // fallible

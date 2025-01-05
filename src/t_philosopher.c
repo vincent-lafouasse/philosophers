@@ -2,8 +2,24 @@
 #include <stdio.h>
 #include "t_error.h"
 
-t_philosopher philosopher_new(u32 index, const t_config* cfg) {
-    return (t_philosopher){.index = index, .cfg = cfg};
+t_philosopher philosopher_new(u32 index,
+                              const t_config* cfg,
+                              pthread_mutex_t* forks) {
+    pthread_mutex_t* left_fork;
+    pthread_mutex_t* right_fork;
+
+    if (index == 0) {
+        left_fork = forks + cfg->n_philosophers - 1;
+        right_fork = forks;
+    } else {
+        left_fork = forks + index - 1;
+        right_fork = forks + index;
+    }
+
+    return (t_philosopher){.index = index,
+                           .cfg = cfg,
+                           .left_fork = left_fork,
+                           .right_fork = right_fork};
 }
 
 void* thread_routine(void* arg) {
