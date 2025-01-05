@@ -27,6 +27,20 @@ t_philosopher philosopher_new(u32 index,
     };
 }
 
+pthread_mutex_t* first_fork(const t_philosopher* p) {
+    if (p->index % 2)
+        return (pthread_mutex_t*)p->left_fork;
+    else
+        return (pthread_mutex_t*)p->right_fork;
+}
+
+pthread_mutex_t* second_fork(const t_philosopher* p) {
+    if (p->index % 2)
+        return (pthread_mutex_t*)p->right_fork;
+    else
+        return (pthread_mutex_t*)p->left_fork;
+}
+
 void* thread_routine(void* arg) {
     t_philosopher self = *((t_philosopher*)arg);
     printf("thread %u starting\n", self.index);
