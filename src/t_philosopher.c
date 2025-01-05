@@ -4,7 +4,8 @@
 
 t_philosopher philosopher_new(u32 index,
                               const t_config* cfg,
-                              pthread_mutex_t* forks) {
+                              pthread_mutex_t* forks,
+                              pthread_mutex_t* output_lock) {
     pthread_mutex_t* left_fork;
     pthread_mutex_t* right_fork;
 
@@ -16,10 +17,14 @@ t_philosopher philosopher_new(u32 index,
         right_fork = forks + index;
     }
 
-    return (t_philosopher){.index = index,
-                           .cfg = cfg,
-                           .left_fork = left_fork,
-                           .right_fork = right_fork};
+    return (t_philosopher){
+        .index = index,
+        .cfg = cfg,
+        .left_fork = left_fork,
+        .right_fork = right_fork,
+        .output_lock = output_lock,
+
+    };
 }
 
 void* thread_routine(void* arg) {

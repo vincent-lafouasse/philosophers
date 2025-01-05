@@ -44,7 +44,8 @@ static t_state init(const t_config* cfg) {
     pthread_mutex_init(&out.output_lock, NULL);
 
     for (u32 i = 0; i < out.cfg->n_philosophers; i++)
-        out.philosophers[i] = philosopher_new(i, cfg, out.forks);
+        out.philosophers[i] =
+            philosopher_new(i, cfg, out.forks, &out.output_lock);
 
     return out;
 }
