@@ -47,7 +47,9 @@ t_error start(t_state* state) {
     return NO_ERROR;
 }
 
-void cleanup(t_state* state) { (void)state; }
+void cleanup(t_state* state) {
+    (void)state;
+}
 
 int main(int ac, char* av[]) {
     const t_config cfg = load_config(ac, av);
