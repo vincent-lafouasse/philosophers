@@ -8,14 +8,14 @@ typedef struct s_philosopher t_philosopher;
 struct s_philosopher {
     pthread_t thread;
     u32 index;
-    const t_config* cfg;
+    t_config cfg;
     pthread_mutex_t* left_fork;
     pthread_mutex_t* right_fork;
     pthread_mutex_t* output_lock;
 };
 
 t_philosopher philosopher_new(u32 index,
-                              const t_config* cfg,
                               pthread_mutex_t* forks,
-                              pthread_mutex_t* output_lock);
+                              pthread_mutex_t* output_lock,
+                              t_config cfg);
 t_error philosopher_start(t_philosopher* self);

@@ -3,14 +3,14 @@
 #include "t_error.h"
 
 t_philosopher philosopher_new(u32 index,
-                              const t_config* cfg,
                               pthread_mutex_t* forks,
-                              pthread_mutex_t* output_lock) {
+                              pthread_mutex_t* output_lock,
+                              t_config cfg) {
     pthread_mutex_t* left_fork;
     pthread_mutex_t* right_fork;
 
     if (index == 0) {
-        left_fork = forks + cfg->n_philosophers - 1;
+        left_fork = forks + cfg.n_philosophers - 1;
         right_fork = forks;
     } else {
         left_fork = forks + index - 1;
