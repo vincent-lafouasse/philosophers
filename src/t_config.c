@@ -2,16 +2,14 @@
 
 #include <stdio.h>
 
-t_config load_config(int ac, char* av[])
-{
+t_config load_config(int ac, char* av[]) {
     (void)ac;
     (void)av;
 
     return (t_config){.n_philosophers = 3, .time_to_sleep_us = 1000000};
 }
 
-void log_config(const t_config* cfg)
-{
+void log_config(const t_config* cfg) {
     if (!cfg)
         return;
 

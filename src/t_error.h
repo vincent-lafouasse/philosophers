@@ -1,7 +1,6 @@
 #pragma once
 
-typedef enum e_error
-{
+typedef enum e_error {
     NO_ERROR,
     E_OOM,
     E_PTHREAD_CREATE,

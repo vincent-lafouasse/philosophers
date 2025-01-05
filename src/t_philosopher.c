@@ -2,20 +2,17 @@
 #include <stdio.h>
 #include "t_error.h"
 
-t_philosopher philosopher_new(u32 index, const t_config* cfg)
-{
+t_philosopher philosopher_new(u32 index, const t_config* cfg) {
     return (t_philosopher){.index = index, .cfg = cfg};
 }
 
-void* thread_routine(void* arg)
-{
+void* thread_routine(void* arg) {
     t_philosopher self = *((t_philosopher*)arg);
     printf("thread %u starting\n", self.index);
     return NULL;
 }
 
-t_error philosopher_start(t_philosopher* self)
-{
+t_error philosopher_start(t_philosopher* self) {
     int status = pthread_create(&self->thread, NULL, thread_routine, self);
 
     if (status == 0)
