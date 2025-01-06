@@ -47,10 +47,26 @@ void* thread_routine(void* arg) {
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             pthread_mutex_lock(self.second_fork);
+            state = EATING;
+            continue;
+        } else if (state == EATING) {
             printf("%05u %u is eating\n",
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             usleep(self.cfg.time_to_eat_us);
+            last_meal = instant_now();
+            has_eaten = true;
+            pthread_mutex_unlock(self.first_fork);
+            pthread_mutex_unlock(self.second_fork);
+            state = SLEEPING;
+            continue;
+        } else {
+            printf("%05u %u is sleeping\n",
+                   duration_since(&simulation_start).milliseconds,
+                   self.index + 1);
+            usleep(self.cfg.time_to_sleep_us);
+            state = THINKING;
+            continue;
         }
     }
     return NULL;
