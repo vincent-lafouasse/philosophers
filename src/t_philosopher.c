@@ -1,6 +1,7 @@
 #include "t_philosopher.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <unistd.h>
 #include "t_error.h"
 #include "ft_time.h"
 
@@ -36,11 +37,14 @@ void* thread_routine(void* arg) {
     bool has_eaten = false;
     t_philosopher_state state = THINKING;
 
-    printf("thread %u starting\n", self.index);
     while (1) {
         if (state == THINKING) {
+            printf("%05u %u is thinking\n", duration_since(&simulation_start).milliseconds, self.index + 1);
             pthread_mutex_lock(self.first_fork);
+            printf("%05u %u has 1 fork\n", duration_since(&simulation_start).milliseconds, self.index + 1);
             pthread_mutex_lock(self.second_fork);
+            printf("%05u %u is eating\n", duration_since(&simulation_start).milliseconds, self.index + 1);
+            usleep(self.cfg.time_to_eat_us);
         }
     }
     return NULL;
