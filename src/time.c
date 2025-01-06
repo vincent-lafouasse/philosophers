@@ -1,4 +1,5 @@
-#include "t_duration.h"
+#include "time.h"
+#include <stddef.h>
 #include <sys/time.h>
 
 t_instant instant_now(void) {
