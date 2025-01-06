@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "ft_time.h"
 #include "t_config.h"
 #include "t_philosopher.h"
 
