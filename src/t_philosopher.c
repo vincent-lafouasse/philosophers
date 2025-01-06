@@ -1,9 +1,9 @@
 #include "t_philosopher.h"
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <unistd.h>
-#include "t_error.h"
 #include "ft_time.h"
+#include "t_error.h"
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
@@ -39,11 +39,17 @@ void* thread_routine(void* arg) {
 
     while (1) {
         if (state == THINKING) {
-            printf("%05u %u is thinking\n", duration_since(&simulation_start).milliseconds, self.index + 1);
+            printf("%05u %u is thinking\n",
+                   duration_since(&simulation_start).milliseconds,
+                   self.index + 1);
             pthread_mutex_lock(self.first_fork);
-            printf("%05u %u has 1 fork\n", duration_since(&simulation_start).milliseconds, self.index + 1);
+            printf("%05u %u has 1 fork\n",
+                   duration_since(&simulation_start).milliseconds,
+                   self.index + 1);
             pthread_mutex_lock(self.second_fork);
-            printf("%05u %u is eating\n", duration_since(&simulation_start).milliseconds, self.index + 1);
+            printf("%05u %u is eating\n",
+                   duration_since(&simulation_start).milliseconds,
+                   self.index + 1);
             usleep(self.cfg.time_to_eat_us);
         }
     }
