@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -17,6 +18,10 @@ static t_state init(t_config cfg);
 static t_error start(t_state* state);
 static void cleanup(t_state* state);
 
+void sleep_ms(u32 ms) {
+    usleep(ms * 1000);
+}
+
 int main(int ac, char* av[]) {
     const t_config cfg = load_config(ac, av);
     log_config(cfg);
@@ -24,6 +29,16 @@ int main(int ac, char* av[]) {
     t_state state = init(cfg);
     start(&state);
     cleanup(&state);
+
+    t_instant start = instant_now();
+
+    for (int i = 0; i < 5; i++) {
+        printf("%u ms\n", duration_since(&start).milliseconds);
+        if (i % 2)
+            sleep_ms(1000);
+        else
+            sleep_ms(500);
+    }
 }
 
 static t_state init(t_config cfg) {
