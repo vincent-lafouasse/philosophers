@@ -6,39 +6,25 @@ t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
                               pthread_mutex_t* output_lock,
                               t_config cfg) {
-    pthread_mutex_t* left_fork;
-    pthread_mutex_t* right_fork;
+    pthread_mutex_t* first_fork;
+    pthread_mutex_t* second_fork;
 
-    if (index == 0) {
-        left_fork = forks + cfg.n_philosophers - 1;
-        right_fork = forks;
+    if (index != cfg.n_philosophers - 1) {
+        first_fork = forks + index;
+        second_fork = forks + index + 1;
     } else {
-        left_fork = forks + index - 1;
-        right_fork = forks + index;
+        first_fork = forks;
+        second_fork = forks + cfg.n_philosophers - 1;
     }
 
     return (t_philosopher){
         .index = index,
         .cfg = cfg,
-        .left_fork = left_fork,
-        .right_fork = right_fork,
+        .first_fork = first_fork,
+        .second_fork = second_fork,
         .output_lock = output_lock,
 
     };
-}
-
-pthread_mutex_t* first_fork(const t_philosopher* p) {
-    if (p->index % 2)
-        return (pthread_mutex_t*)p->left_fork;
-    else
-        return (pthread_mutex_t*)p->right_fork;
-}
-
-pthread_mutex_t* second_fork(const t_philosopher* p) {
-    if (p->index % 2)
-        return (pthread_mutex_t*)p->right_fork;
-    else
-        return (pthread_mutex_t*)p->left_fork;
 }
 
 void* thread_routine(void* arg) {

@@ -9,8 +9,8 @@ struct s_philosopher {
     pthread_t thread;
     u32 index;
     t_config cfg;
-    pthread_mutex_t* left_fork;
-    pthread_mutex_t* right_fork;
+    pthread_mutex_t* first_fork;
+    pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
 };
 
