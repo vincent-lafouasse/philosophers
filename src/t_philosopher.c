@@ -33,8 +33,7 @@ t_philosopher philosopher_new(u32 index,
 void* thread_routine(void* arg) {
     t_philosopher self = *((t_philosopher*)arg);
     t_instant simulation_start = instant_now();
-    t_instant last_meal;
-    bool has_eaten = false;
+    t_instant death_timer = instant_now();
     t_philosopher_state state = THINKING;
 
     while (1) {
@@ -43,10 +42,20 @@ void* thread_routine(void* arg) {
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             pthread_mutex_lock(self.first_fork);
+            if (duration_since(&death_timer).milliseconds * 1000 >
+                self.cfg.time_to_die_us)
+                printf("%05u %u HAS DIED\n",
+                       duration_since(&simulation_start).milliseconds,
+                       self.index + 1);
             printf("%05u %u has 1 fork\n",
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             pthread_mutex_lock(self.second_fork);
+            if (duration_since(&death_timer).milliseconds * 1000 >
+                self.cfg.time_to_die_us)
+                printf("%05u %u HAS DIED\n",
+                       duration_since(&simulation_start).milliseconds,
+                       self.index + 1);
             state = EATING;
             continue;
         } else if (state == EATING) {
@@ -54,8 +63,7 @@ void* thread_routine(void* arg) {
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             usleep(self.cfg.time_to_eat_us);
-            last_meal = instant_now();
-            has_eaten = true;
+            death_timer = instant_now();
             pthread_mutex_unlock(self.first_fork);
             pthread_mutex_unlock(self.second_fork);
             state = SLEEPING;
@@ -65,6 +73,11 @@ void* thread_routine(void* arg) {
                    duration_since(&simulation_start).milliseconds,
                    self.index + 1);
             usleep(self.cfg.time_to_sleep_us);
+            if (duration_since(&death_timer).milliseconds * 1000 >
+                self.cfg.time_to_die_us)
+                printf("%05u %u HAS DIED\n",
+                       duration_since(&simulation_start).milliseconds,
+                       self.index + 1);
             state = THINKING;
             continue;
         }
