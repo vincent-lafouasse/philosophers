@@ -6,10 +6,10 @@ t_config load_config(int ac, char* av[]) {
     (void)ac;
     (void)av;
 
-    u32 n_philosophers = 5;
-    u32 time_to_die_ms = 800;
-    u32 time_to_eat_ms = 200;
-    u32 time_to_sleep_ms = 200;
+    u32 n_philosophers = 3;
+    u32 time_to_die_ms = 4000;
+    u32 time_to_eat_ms = 1000;
+    u32 time_to_sleep_ms = 1000;
 
     return (t_config){
         .n_philosophers = n_philosophers,
