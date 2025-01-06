@@ -1,6 +1,8 @@
 #include "t_philosopher.h"
 #include <stdio.h>
+#include <stdbool.h>
 #include "t_error.h"
+#include "ft_time.h"
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
@@ -29,7 +31,18 @@ t_philosopher philosopher_new(u32 index,
 
 void* thread_routine(void* arg) {
     t_philosopher self = *((t_philosopher*)arg);
+    t_instant simulation_start = instant_now();
+    t_instant last_meal;
+    bool has_eaten = false;
+    t_philosopher_state state = THINKING;
+
     printf("thread %u starting\n", self.index);
+    while (1) {
+        if (state == THINKING) {
+            pthread_mutex_lock(self.first_fork);
+            pthread_mutex_lock(self.second_fork);
+        }
+    }
     return NULL;
 }
 
