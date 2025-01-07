@@ -4,8 +4,12 @@
 #include <unistd.h>
 #include "ft_time.h"
 #include "t_error.h"
+#include "t_message_queue.h"
 
-t_philosopher philosopher_new(u32 index, pthread_mutex_t* forks, t_config cfg) {
+t_philosopher philosopher_new(u32 index,
+                              pthread_mutex_t* forks,
+                              t_message_queue* messages,
+                              t_config cfg) {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
 
@@ -23,7 +27,7 @@ t_philosopher philosopher_new(u32 index, pthread_mutex_t* forks, t_config cfg) {
         .first_fork = first_fork,
         .second_fork = second_fork,
         .state = THINKING,
-
+        .messages = messages,
     };
 }
 
@@ -35,6 +39,8 @@ void philosopher_set_state(t_philosopher* self, t_philosopher_state new_state) {
 
 void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
+
+    mq_push(self->messages, THINKING); // test
 
     while (1) {
         if (self->state == THINKING) {
