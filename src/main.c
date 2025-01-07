@@ -7,6 +7,8 @@
 #include "t_config.h"
 #include "t_philosopher.h"
 
+void sleep_ms(u32 ms);
+
 typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
@@ -56,7 +58,7 @@ void* logging_thread_routine(void* arg) {
 
         t_duration frame_length = duration_since(&frame_start);
         if (frame_length.milliseconds < 20)
-            usleep(20000 - frame_length.milliseconds * 1000);
+            sleep_ms(20 - frame_length.milliseconds);
     }
 
     return NULL;
@@ -122,6 +124,10 @@ static t_error start(t_state* state) {
     for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
         pthread_join(state->philosophers[i].thread, NULL);  // fallible
     }
+
+    pthread_t logging_thread;
+    pthread_create(&logging_thread, NULL, logging_thread_routine, state);
+    pthread_join(logging_thread, NULL);
 
     return NO_ERROR;
 }
