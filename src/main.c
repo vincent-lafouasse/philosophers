@@ -14,6 +14,7 @@ void sleep_ms(u32 ms);
 typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
+    t_message_queue messages;
     t_config cfg;
 } t_state;
 
@@ -82,6 +83,7 @@ static t_state init(t_config cfg) {
     out = (t_state){
         .philosophers = malloc(cfg.n_philosophers * sizeof(*out.philosophers)),
         .forks = malloc(cfg.n_philosophers * sizeof(*out.forks)),
+        .messages = mq_new(),
         .cfg = cfg};
     if (!out.philosophers || !out.forks) {
         free(out.philosophers);
