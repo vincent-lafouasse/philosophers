@@ -46,9 +46,9 @@ void* logging_thread_routine(void* arg) {
     while (1) {
         t_instant frame_start = instant_now();
         for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-            pthread_mutex_lock(&state->philosophers->state_lock);
-            t_philosopher_state new_state = state->philosophers->state;
-            pthread_mutex_unlock(&state->philosophers->state_lock);
+            pthread_mutex_lock(&state->philosophers[i].state_lock);
+            t_philosopher_state new_state = state->philosophers[i].state;
+            pthread_mutex_unlock(&state->philosophers[i].state_lock);
 
             if (new_state == philo_states[i])
                 continue;
