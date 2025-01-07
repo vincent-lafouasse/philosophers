@@ -1,8 +1,9 @@
 #include "t_config.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
-t_config load_config(int ac, char* av[]) {
+t_config debug_config(int ac, char* av[]) {
     (void)ac;
     (void)av;
 
@@ -10,6 +11,23 @@ t_config load_config(int ac, char* av[]) {
     u32 time_to_die_ms = 4000;
     u32 time_to_eat_ms = 1000;
     u32 time_to_sleep_ms = 1000;
+
+    return (t_config){
+        .n_philosophers = n_philosophers,
+        .time_to_die_us = 1000 * time_to_die_ms,
+        .time_to_eat_us = 1000 * time_to_eat_ms,
+        .time_to_sleep_us = 1000 * time_to_sleep_ms,
+    };
+}
+
+
+t_config load_config(int ac, char* av[]) {
+    if (ac)
+        ;
+    u32 n_philosophers = atoi(av[1]);
+    u32 time_to_die_ms = atoi(av[2]);
+    u32 time_to_eat_ms = atoi(av[3]);
+    u32 time_to_sleep_ms = atoi(av[4]);
 
     return (t_config){
         .n_philosophers = n_philosophers,
