@@ -17,7 +17,6 @@ t_config debug_config(void) {
     };
 }
 
-
 t_config load_config(int ac, char* av[]) {
     if (ac == 1)
         return debug_config();
