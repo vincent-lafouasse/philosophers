@@ -19,7 +19,7 @@ typedef struct {
 void log_state_change(t_philosopher_state new_state,
                       u32 index,
                       t_instant simulation_start) {
-    printf("%010u %u", duration_since(&simulation_start).milliseconds,
+    printf("%08u %u", duration_since(&simulation_start).milliseconds,
            index + 1);
     if (new_state == THINKING)
         printf(" is thinking\n");
@@ -59,7 +59,6 @@ int main(int ac, char* av[]) {
     }
 
     while (1) {
-        t_instant frame_start = instant_now();
         for (u32 i = 0; i < cfg.n_philosophers; i++) {
             pthread_mutex_lock(&state.philosophers[i].state_lock);
             t_philosopher_state new_state = state.philosophers[i].state;
@@ -71,10 +70,6 @@ int main(int ac, char* av[]) {
             philo_states[i] = new_state;
             timestamps[i] = instant_now();
         }
-
-        t_duration frame_length = duration_since(&frame_start);
-        if (frame_length.milliseconds < 20)
-            sleep_ms(20 - frame_length.milliseconds);
     }
 
     cleanup(&state);
@@ -111,7 +106,7 @@ static t_error run(t_state* state) {
     }
 
     for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-        pthread_join(state->philosophers[i].thread, NULL);  // fallible
+        pthread_detach(state->philosophers[i].thread);
     }
     return NO_ERROR;
 }
