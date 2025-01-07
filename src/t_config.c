@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-t_config debug_config(int ac, char* av[]) {
-    (void)ac;
-    (void)av;
-
+t_config debug_config(void) {
     u32 n_philosophers = 3;
     u32 time_to_die_ms = 4000;
     u32 time_to_eat_ms = 1000;
@@ -22,8 +19,9 @@ t_config debug_config(int ac, char* av[]) {
 
 
 t_config load_config(int ac, char* av[]) {
-    if (ac)
-        ;
+    if (ac == 1)
+        return debug_config();
+
     u32 n_philosophers = atoi(av[1]);
     u32 time_to_die_ms = atoi(av[2]);
     u32 time_to_eat_ms = atoi(av[3]);

@@ -18,6 +18,8 @@ struct s_philosopher {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
+    t_philosopher_state state;
+    pthread_mutex_t state_lock;
     t_config cfg;
 };
 

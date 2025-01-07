@@ -26,59 +26,35 @@ t_philosopher philosopher_new(u32 index,
         .first_fork = first_fork,
         .second_fork = second_fork,
         .output_lock = output_lock,
+        .state = THINKING,
 
     };
 }
 
+void philosopher_set_state(t_philosopher* self, t_philosopher_state new_state) {
+    pthread_mutex_lock(&self->state_lock);
+    self->state = new_state;
+    pthread_mutex_unlock(&self->state_lock);
+}
+
 void* thread_routine(void* arg) {
-    t_philosopher self = *((t_philosopher*)arg);
-    t_instant simulation_start = instant_now();
-    t_instant death_timer = instant_now();
-    t_philosopher_state state = THINKING;
+    t_philosopher* self = (t_philosopher*)arg;
 
     while (1) {
-        if (state == THINKING) {
-            printf("%05u %u is thinking\n",
-                   duration_since(&simulation_start).milliseconds,
-                   self.index + 1);
-            pthread_mutex_lock(self.first_fork);
-            if (duration_since(&death_timer).milliseconds * 1000 >
-                self.cfg.time_to_die_us)
-                printf("%05u %u HAS DIED\n",
-                       duration_since(&simulation_start).milliseconds,
-                       self.index + 1);
-            printf("%05u %u has 1 fork\n",
-                   duration_since(&simulation_start).milliseconds,
-                   self.index + 1);
-            pthread_mutex_lock(self.second_fork);
-            if (duration_since(&death_timer).milliseconds * 1000 >
-                self.cfg.time_to_die_us)
-                printf("%05u %u HAS DIED\n",
-                       duration_since(&simulation_start).milliseconds,
-                       self.index + 1);
-            state = EATING;
+        if (self->state == THINKING) {
+            pthread_mutex_lock(self->first_fork);
+            pthread_mutex_lock(self->second_fork);
+            philosopher_set_state(self, EATING);
             continue;
-        } else if (state == EATING) {
-            printf("%05u %u is eating\n",
-                   duration_since(&simulation_start).milliseconds,
-                   self.index + 1);
-            usleep(self.cfg.time_to_eat_us);
-            death_timer = instant_now();
-            pthread_mutex_unlock(self.first_fork);
-            pthread_mutex_unlock(self.second_fork);
-            state = SLEEPING;
+        } else if (self->state == EATING) {
+            usleep(self->cfg.time_to_eat_us);
+            pthread_mutex_unlock(self->first_fork);
+            pthread_mutex_unlock(self->second_fork);
+            philosopher_set_state(self, SLEEPING);
             continue;
         } else {
-            printf("%05u %u is sleeping\n",
-                   duration_since(&simulation_start).milliseconds,
-                   self.index + 1);
-            usleep(self.cfg.time_to_sleep_us);
-            if (duration_since(&death_timer).milliseconds * 1000 >
-                self.cfg.time_to_die_us)
-                printf("%05u %u HAS DIED\n",
-                       duration_since(&simulation_start).milliseconds,
-                       self.index + 1);
-            state = THINKING;
+            usleep(self->cfg.time_to_sleep_us);
+            philosopher_set_state(self, THINKING);
             continue;
         }
     }
@@ -90,6 +66,8 @@ t_error philosopher_start(t_philosopher* self) {
 
     if (status == 0)
         return E_PTHREAD_CREATE;
+
+    pthread_mutex_init(&self->state_lock, NULL);
 
     return NO_ERROR;
 }
