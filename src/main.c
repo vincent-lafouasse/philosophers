@@ -80,7 +80,7 @@ typedef struct {
 void log_state_change(t_philosopher_state new_state,
                       u32 index,
                       t_instant simulation_start) {
-    printf("%08u %u", duration_since(&simulation_start).milliseconds,
+    printf("%06u %u", duration_since(&simulation_start).milliseconds,
            index + 1);
     if (new_state == THINKING)
         printf(" is thinking\n");
