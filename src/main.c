@@ -14,6 +14,54 @@ typedef struct {
     t_config cfg;
 } t_state;
 
+void log_state_change(t_philosopher_state new_state, u32 index, t_instant simulation_start) {
+    printf("%010u %u",
+           duration_since(&simulation_start).milliseconds,
+           index + 1);
+    if (new_state == THINKING)
+        printf(" is thinking\n");
+    if (new_state == FORK_HANDED)
+        printf(" is has taken a fork\n");
+    if (new_state == EATING)
+        printf(" is eating\n");
+    if (new_state == SLEEPING)
+        printf(" is sleeping\n");
+    if (new_state == DEAD)
+        printf(" is ded\n");
+}
+
+void* logging_thread_routine(void* arg) {
+    t_state* state = (t_state*)arg;
+    t_instant start = instant_now();
+    t_philosopher_state* philo_states = malloc(state->cfg.n_philosophers * sizeof(*philo_states));
+    t_instant* timestamps = malloc(state->cfg.n_philosophers * sizeof(*timestamps));
+
+    for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
+        philo_states[i] = THINKING;
+        timestamps[i] = start;
+    }
+
+    while (1) {
+        t_instant frame_start = instant_now();
+        for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
+            pthread_mutex_lock(&state->philosophers->state_lock);
+            t_philosopher_state new_state = state->philosophers->state;
+            pthread_mutex_unlock(&state->philosophers->state_lock);
+
+            if (new_state == philo_states[i])
+                continue;
+            log_state_change(new_state, i, start);
+            philo_states[i] = new_state;
+        }
+
+        t_duration frame_length = duration_since(&frame_start);
+        if (frame_length.milliseconds < 20)
+            usleep(20000 - frame_length.milliseconds * 1000);
+    }
+
+    return NULL;
+}
+
 static t_state init(t_config cfg);
 static t_error start(t_state* state);
 static void cleanup(t_state* state);
