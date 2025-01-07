@@ -33,42 +33,8 @@ void log_state_change(t_philosopher_state new_state,
         printf(" is ded\n");
 }
 
-void* logging_thread_routine(void* arg) {
-    t_state* state = (t_state*)arg;
-    t_instant start = instant_now();
-    t_philosopher_state* philo_states =
-        malloc(state->cfg.n_philosophers * sizeof(*philo_states));
-    t_instant* timestamps =
-        malloc(state->cfg.n_philosophers * sizeof(*timestamps));
-
-    for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-        philo_states[i] = THINKING;
-        timestamps[i] = start;
-    }
-
-    while (1) {
-        t_instant frame_start = instant_now();
-        for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-            pthread_mutex_lock(&state->philosophers[i].state_lock);
-            t_philosopher_state new_state = state->philosophers[i].state;
-            pthread_mutex_unlock(&state->philosophers[i].state_lock);
-
-            if (new_state == philo_states[i])
-                continue;
-            log_state_change(new_state, i, start);
-            philo_states[i] = new_state;
-        }
-
-        t_duration frame_length = duration_since(&frame_start);
-        if (frame_length.milliseconds < 20)
-            sleep_ms(20 - frame_length.milliseconds);
-    }
-
-    return NULL;
-}
-
 static t_state init(t_config cfg);
-static t_error start(t_state* state);
+static t_error run(t_state* state);
 static void cleanup(t_state* state);
 
 void sleep_ms(u32 ms) {
@@ -80,7 +46,37 @@ int main(int ac, char* av[]) {
     log_config(cfg);
 
     t_state state = init(cfg);
-    start(&state);
+    run(&state);
+
+    t_instant simulation_start = instant_now();
+    t_philosopher_state* philo_states =
+        malloc(cfg.n_philosophers * sizeof(*philo_states));
+    t_instant* timestamps = malloc(cfg.n_philosophers * sizeof(*timestamps));
+
+    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+        philo_states[i] = THINKING;
+        timestamps[i] = simulation_start;
+    }
+
+    while (1) {
+        t_instant frame_start = instant_now();
+        for (u32 i = 0; i < cfg.n_philosophers; i++) {
+            pthread_mutex_lock(&state.philosophers[i].state_lock);
+            t_philosopher_state new_state = state.philosophers[i].state;
+            pthread_mutex_unlock(&state.philosophers[i].state_lock);
+
+            if (new_state == philo_states[i])
+                continue;
+            log_state_change(new_state, i, simulation_start);
+            philo_states[i] = new_state;
+            timestamps[i] = instant_now();
+        }
+
+        t_duration frame_length = duration_since(&frame_start);
+        if (frame_length.milliseconds < 20)
+            sleep_ms(20 - frame_length.milliseconds);
+    }
+
     cleanup(&state);
 }
 
@@ -109,7 +105,7 @@ static t_state init(t_config cfg) {
     return out;
 }
 
-static t_error start(t_state* state) {
+static t_error run(t_state* state) {
     for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
         philosopher_start(state->philosophers + i);  // fallible
     }
@@ -117,11 +113,6 @@ static t_error start(t_state* state) {
     for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
         pthread_join(state->philosophers[i].thread, NULL);  // fallible
     }
-
-    pthread_t logging_thread;
-    pthread_create(&logging_thread, NULL, logging_thread_routine, state);
-    pthread_join(logging_thread, NULL);
-
     return NO_ERROR;
 }
 
