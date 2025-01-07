@@ -53,27 +53,20 @@ bool mq_push(t_message_queue* mq, t_philosopher_state state) {
     return true;
 }
 
-bool mq_pop(t_message_queue* mq,
-            t_philosopher_state* state_out,
-            t_instant* timestamp_out) {
+t_message* mq_pop(t_message_queue* mq) {
     pthread_mutex_lock(&mq->guard);
     if (!mq->head) {
         pthread_mutex_unlock(&mq->guard);
-        return false;
+        return NULL;
     }
-    t_message* old_head = mq->head;
-    t_message* new_head = old_head->next;
+    t_message* out = mq->head;
 
-    if (new_head)
-        new_head->prev = NULL;
-    mq->head = new_head;
+    if (out->next != NULL)
+        out->next->prev = NULL;
+    mq->head = out->next;
     pthread_mutex_unlock(&mq->guard);
 
-    *state_out = old_head->state;
-    *timestamp_out = old_head->timestamp;
-    free(old_head);
-
-    return true;
+    return out;
 }
 
 void sleep_ms(u32 ms);
