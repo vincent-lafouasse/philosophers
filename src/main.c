@@ -16,9 +16,10 @@ typedef struct {
     t_config cfg;
 } t_state;
 
-void log_state_change(t_philosopher_state new_state, u32 index, t_instant simulation_start) {
-    printf("%010u %u",
-           duration_since(&simulation_start).milliseconds,
+void log_state_change(t_philosopher_state new_state,
+                      u32 index,
+                      t_instant simulation_start) {
+    printf("%010u %u", duration_since(&simulation_start).milliseconds,
            index + 1);
     if (new_state == THINKING)
         printf(" is thinking\n");
@@ -35,8 +36,10 @@ void log_state_change(t_philosopher_state new_state, u32 index, t_instant simula
 void* logging_thread_routine(void* arg) {
     t_state* state = (t_state*)arg;
     t_instant start = instant_now();
-    t_philosopher_state* philo_states = malloc(state->cfg.n_philosophers * sizeof(*philo_states));
-    t_instant* timestamps = malloc(state->cfg.n_philosophers * sizeof(*timestamps));
+    t_philosopher_state* philo_states =
+        malloc(state->cfg.n_philosophers * sizeof(*philo_states));
+    t_instant* timestamps =
+        malloc(state->cfg.n_philosophers * sizeof(*timestamps));
 
     for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
         philo_states[i] = THINKING;

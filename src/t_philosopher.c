@@ -74,6 +74,5 @@ t_error philosopher_start(t_philosopher* self) {
     if (status == 0)
         return E_PTHREAD_CREATE;
 
-
     return NO_ERROR;
 }
