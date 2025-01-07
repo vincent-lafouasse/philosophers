@@ -74,7 +74,6 @@ void sleep_ms(u32 ms);
 typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
-    pthread_mutex_t output_lock;
     t_config cfg;
 } t_state;
 
@@ -153,11 +152,9 @@ static t_state init(t_config cfg) {
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(out.forks + i, NULL);
     }
-    pthread_mutex_init(&out.output_lock, NULL);
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
-        out.philosophers[i] =
-            philosopher_new(i, out.forks, &out.output_lock, cfg);
+        out.philosophers[i] = philosopher_new(i, out.forks, cfg);
 
     return out;
 }

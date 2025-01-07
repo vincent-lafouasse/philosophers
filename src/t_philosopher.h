@@ -25,8 +25,5 @@ struct s_philosopher {
     t_config cfg;
 };
 
-t_philosopher philosopher_new(u32 index,
-                              pthread_mutex_t* forks,
-                              pthread_mutex_t* output_lock,
-                              t_config cfg);
+t_philosopher philosopher_new(u32 index, pthread_mutex_t* forks, t_config cfg);
 t_error philosopher_start(t_philosopher* self);

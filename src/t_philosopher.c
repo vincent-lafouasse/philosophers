@@ -5,10 +5,7 @@
 #include "ft_time.h"
 #include "t_error.h"
 
-t_philosopher philosopher_new(u32 index,
-                              pthread_mutex_t* forks,
-                              pthread_mutex_t* output_lock,
-                              t_config cfg) {
+t_philosopher philosopher_new(u32 index, pthread_mutex_t* forks, t_config cfg) {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
 
@@ -25,7 +22,6 @@ t_philosopher philosopher_new(u32 index,
         .cfg = cfg,
         .first_fork = first_fork,
         .second_fork = second_fork,
-        .output_lock = output_lock,
         .state = THINKING,
 
     };
