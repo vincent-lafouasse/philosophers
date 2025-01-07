@@ -1,7 +1,7 @@
 #include <pthread.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <unistd.h>
 
 #include "ft_time.h"
@@ -37,7 +37,8 @@ bool mq_push(t_message_queue* mq, t_philosopher_state state) {
 
     if (!message)
         return false;
-    *message = (t_message){.state=state, .next=NULL, .prev=NULL, .timestamp=instant_now()};
+    *message = (t_message){
+        .state = state, .next = NULL, .prev = NULL, .timestamp = instant_now()};
 
     pthread_mutex_lock(&mq->guard);
     if (!mq->head) {
@@ -52,16 +53,17 @@ bool mq_push(t_message_queue* mq, t_philosopher_state state) {
     return true;
 }
 
-bool mq_pop(t_message_queue* mq, t_philosopher_state* state_out, t_instant* timestamp_out) {
+bool mq_pop(t_message_queue* mq,
+            t_philosopher_state* state_out,
+            t_instant* timestamp_out) {
     pthread_mutex_lock(&mq->guard);
-    if (!mq->head)
-    {
+    if (!mq->head) {
         pthread_mutex_unlock(&mq->guard);
         return false;
     }
     t_message* old_head = mq->head;
     t_message* new_head = old_head->next;
-    
+
     if (new_head)
         new_head->prev = NULL;
     mq->head = new_head;
