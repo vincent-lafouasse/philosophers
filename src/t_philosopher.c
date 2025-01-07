@@ -67,12 +67,13 @@ void* thread_routine(void* arg) {
 }
 
 t_error philosopher_start(t_philosopher* self) {
+    pthread_mutex_init(&self->state_lock, NULL);
+
     int status = pthread_create(&self->thread, NULL, thread_routine, self);
 
     if (status == 0)
         return E_PTHREAD_CREATE;
 
-    pthread_mutex_init(&self->state_lock, NULL);
 
     return NO_ERROR;
 }
