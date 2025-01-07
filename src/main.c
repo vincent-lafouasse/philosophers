@@ -82,16 +82,6 @@ int main(int ac, char* av[]) {
     t_state state = init(cfg);
     start(&state);
     cleanup(&state);
-
-    t_instant start = instant_now();
-
-    for (int i = 0; i < 5; i++) {
-        printf("%u ms\n", duration_since(&start).milliseconds);
-        if (i % 2)
-            sleep_ms(1000);
-        else
-            sleep_ms(500);
-    }
 }
 
 static t_state init(t_config cfg) {
