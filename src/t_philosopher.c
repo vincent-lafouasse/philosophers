@@ -40,7 +40,7 @@ void philosopher_set_state(t_philosopher* self, t_philosopher_state new_state) {
 void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
 
-    mq_push(self->messages, THINKING); // test
+    mq_push(self->messages, THINKING);  // test
 
     while (1) {
         if (self->state == THINKING) {

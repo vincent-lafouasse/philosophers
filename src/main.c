@@ -51,7 +51,6 @@ int main(int ac, char* av[]) {
     t_state state = init(cfg);
     run(&state);
 
-
     t_philosopher_state* philo_states =
         malloc(cfg.n_philosophers * sizeof(*philo_states));
     t_instant* timestamps = malloc(cfg.n_philosophers * sizeof(*timestamps));
@@ -91,7 +90,6 @@ static t_state init(t_config cfg) {
         free(out.forks);
         return (t_state){0};
     }
-
 
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(out.forks + i, NULL);
