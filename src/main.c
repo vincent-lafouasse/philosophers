@@ -15,6 +15,7 @@ typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
     t_message_queue messages;
+    t_instant simulation_start;
     t_config cfg;
 } t_state;
 
@@ -50,14 +51,12 @@ int main(int ac, char* av[]) {
     t_state state = init(cfg);
     run(&state);
 
-    t_instant simulation_start = instant_now();
     t_philosopher_state* philo_states =
         malloc(cfg.n_philosophers * sizeof(*philo_states));
     t_instant* timestamps = malloc(cfg.n_philosophers * sizeof(*timestamps));
-
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         philo_states[i] = THINKING;
-        timestamps[i] = simulation_start;
+        timestamps[i] = state.simulation_start;
     }
 
     while (1) {
@@ -68,7 +67,7 @@ int main(int ac, char* av[]) {
 
             if (new_state == philo_states[i])
                 continue;
-            log_state_change(new_state, i, simulation_start);
+            log_state_change(new_state, i, state.simulation_start);
             philo_states[i] = new_state;
             timestamps[i] = instant_now();
         }
@@ -84,6 +83,7 @@ static t_state init(t_config cfg) {
         .philosophers = malloc(cfg.n_philosophers * sizeof(*out.philosophers)),
         .forks = malloc(cfg.n_philosophers * sizeof(*out.forks)),
         .messages = mq_new(),
+        .simulation_start = instant_now(),
         .cfg = cfg};
     if (!out.philosophers || !out.forks) {
         free(out.philosophers);
