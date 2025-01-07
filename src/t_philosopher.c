@@ -43,6 +43,9 @@ void* thread_routine(void* arg) {
     while (1) {
         if (self->state == THINKING) {
             pthread_mutex_lock(self->first_fork);
+            philosopher_set_state(self, FORK_HANDED);
+            continue;
+        } else if (self->state == FORK_HANDED) {
             pthread_mutex_lock(self->second_fork);
             philosopher_set_state(self, EATING);
             continue;
@@ -52,10 +55,12 @@ void* thread_routine(void* arg) {
             pthread_mutex_unlock(self->second_fork);
             philosopher_set_state(self, SLEEPING);
             continue;
-        } else {
+        } else if (self->state == SLEEPING) {
             usleep(self->cfg.time_to_sleep_us);
             philosopher_set_state(self, THINKING);
             continue;
+        } else {
+            break;
         }
     }
     return NULL;

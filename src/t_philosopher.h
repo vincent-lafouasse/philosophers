@@ -7,8 +7,10 @@
 typedef enum e_philosopher_state t_philosopher_state;
 enum e_philosopher_state {
     THINKING,
+    FORK_HANDED,
     EATING,
     SLEEPING,
+    DEAD,
 };
 
 typedef struct s_philosopher t_philosopher;
