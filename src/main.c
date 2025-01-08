@@ -54,7 +54,7 @@ int main(int ac, char* av[]) {
         if (state.messages->head) {
             t_message* message = mq_pop(state.messages);
             log_message(message, state.simulation_start);
-            if (message->state == EATING || message->state == SLEEPING) {
+            if (message->state == EATING) {
                 free(last_meals[message->index]);
                 last_meals[message->index] = message;
             } else {
