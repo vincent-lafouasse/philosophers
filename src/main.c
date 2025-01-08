@@ -41,13 +41,10 @@ int main(int ac, char* av[]) {
         for (u32 i = 0; i < cfg.n_philosophers; i++) {
             t_instant last_meal = last_meals[i] ? last_meals[i]->timestamp
                                                 : state.simulation_start;
-            if (1000 * duration_since(&last_meal).milliseconds >
-                cfg.time_to_die_us) {
-                printf(
-                    "%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
-                    duration_since(&state.simulation_start).milliseconds, i + 1,
-                    duration_since(&last_meal).milliseconds -
-                        duration_since(&state.simulation_start).milliseconds);
+            if (duration_since(&last_meal).micros > cfg.time_to_die_us) {
+                printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
+                       timestamp_ms(instant_now(), state.simulation_start),
+                       i + 1, timestamp_ms(last_meal, state.simulation_start));
                 exit(1);
             }
         }
