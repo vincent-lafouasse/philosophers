@@ -13,7 +13,6 @@ t_message_queue mq_new(void) {
 
 bool mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
     t_message* message = malloc(sizeof(*message));
-
     if (!message)
         return false;
     *message = (t_message){.state = state,

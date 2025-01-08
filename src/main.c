@@ -14,7 +14,7 @@ void sleep_ms(u32 ms);
 typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
-    t_message_queue messages;
+    t_message_queue* messages;
     t_instant simulation_start;
     t_config cfg;
 } t_state;
@@ -82,22 +82,22 @@ static t_state init(t_config cfg) {
     out = (t_state){
         .philosophers = malloc(cfg.n_philosophers * sizeof(*out.philosophers)),
         .forks = malloc(cfg.n_philosophers * sizeof(*out.forks)),
-        .messages = mq_new(),
+        .messages = malloc(sizeof(*out.messages)),
         .simulation_start = instant_now(),
         .cfg = cfg};
-    if (!out.philosophers || !out.forks) {
+    if (!out.philosophers || !out.forks || !out.messages) {
         free(out.philosophers);
         free(out.forks);
         return (t_state){0};
     }
+    *out.messages = mq_new();
 
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(out.forks + i, NULL);
     }
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
-        out.philosophers[i] =
-            philosopher_new(i, out.forks, &out.messages, cfg);  // hanging ref?
+        out.philosophers[i] = philosopher_new(i, out.forks, out.messages, cfg);
 
     return out;
 }
