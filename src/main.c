@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "ft_time.h"
@@ -33,6 +34,9 @@ int main(int ac, char* av[]) {
 
     t_state state = init(cfg);
     run(&state);
+
+    t_message** last_meals = malloc(cfg.n_philosophers * sizeof(t_message*));
+    memset(last_meals, 0, cfg.n_philosophers * sizeof(t_message*));
 
     while (1) {
         if (state.messages->head) {
