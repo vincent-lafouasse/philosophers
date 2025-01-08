@@ -13,12 +13,12 @@ t_philosopher philosopher_new(u32 index,
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
 
-    if (index != cfg.n_philosophers - 1) {
+    if (index % 2) {
         first_fork = forks + index;
-        second_fork = forks + index + 1;
+        second_fork = forks + (index + 1) % cfg.n_philosophers;
     } else {
-        first_fork = forks;
-        second_fork = forks + cfg.n_philosophers - 1;
+        first_fork = forks + (index + 1) % cfg.n_philosophers;
+        second_fork = forks + index;
     }
 
     return (t_philosopher){
