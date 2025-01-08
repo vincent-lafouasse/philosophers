@@ -1,6 +1,6 @@
 #!/bin/bash
 
-make > /dev/null
+make >/dev/null
 
 if [ $# -eq 0 ]; then
     echo "Usage: sh test/test.sh [1-5]"
