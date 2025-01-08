@@ -11,13 +11,16 @@ t_message_queue mq_new(void) {
     return out;
 }
 
-bool mq_push(t_message_queue* mq, t_philosopher_state state) {
+bool mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
     t_message* message = malloc(sizeof(*message));
 
     if (!message)
         return false;
-    *message = (t_message){
-        .state = state, .next = NULL, .prev = NULL, .timestamp = instant_now()};
+    *message = (t_message){.state = state,
+                           .next = NULL,
+                           .prev = NULL,
+                           .timestamp = instant_now(),
+                           .index = index};
 
     pthread_mutex_lock(&mq->guard);
     if (!mq->head) {

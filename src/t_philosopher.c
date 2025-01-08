@@ -35,12 +35,11 @@ void philosopher_set_state(t_philosopher* self, t_philosopher_state new_state) {
     pthread_mutex_lock(&self->state_lock);
     self->state = new_state;
     pthread_mutex_unlock(&self->state_lock);
+    mq_push(self->messages, new_state, self->index);
 }
 
 void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
-
-    mq_push(self->messages, THINKING);  // test
 
     while (1) {
         if (self->state == THINKING) {
