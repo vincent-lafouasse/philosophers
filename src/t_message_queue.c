@@ -1,6 +1,21 @@
 #include "t_message_queue.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+
+void log_message(const t_message* message, t_instant start) {
+    printf("%06u %u", duration_since(&start).milliseconds, message->index + 1);
+    if (message->state == THINKING)
+        printf(" is thinking\n");
+    if (message->state == FORK_HANDED)
+        printf(" is has taken a fork\n");
+    if (message->state == EATING)
+        printf(" is eating\n");
+    if (message->state == SLEEPING)
+        printf(" is sleeping\n");
+    if (message->state == DEAD)
+        printf(" is ded\n");
+}
 
 t_message_queue mq_new(void) {
     t_message_queue out;
