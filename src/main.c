@@ -36,9 +36,21 @@ int main(int ac, char* av[]) {
     run(&state);
 
     t_message** last_meals = malloc(cfg.n_philosophers * sizeof(t_message*));
-    memset(last_meals, 0, cfg.n_philosophers * sizeof(t_message*));
 
     while (1) {
+        for (u32 i = 0; i < cfg.n_philosophers; i++) {
+            t_instant last_meal = last_meals[i] ? last_meals[i]->timestamp
+                                                : state.simulation_start;
+            if (1000 * duration_since(&last_meal).milliseconds >
+                cfg.time_to_die_us) {
+                printf(
+                    "%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
+                    duration_since(&state.simulation_start).milliseconds, i + 1,
+                    duration_since(&last_meal).milliseconds -
+                        duration_since(&state.simulation_start).milliseconds);
+                exit(1);
+            }
+        }
         if (state.messages->head) {
             t_message* message = mq_pop(state.messages);
             log_message(message, state.simulation_start);
