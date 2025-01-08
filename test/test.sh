@@ -36,7 +36,7 @@ elif [ "$1" == "3" ]; then
 elif [ "$1" == "4" ]; then
     should_continue
     ./philo 4 410 200 200
-elif [ "$1" == "2" ]; then
+elif [ "$1" == "5" ]; then
     should_die
     ./philo 4 310 200 100
 else
