@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 void log_message(const t_message* message, t_instant start) {
-    printf("%06u %u", duration_since(&start).milliseconds, message->index + 1);
+    printf("%06u %u", timestamp_ms(message->timestamp, start),
+           message->index + 1);
     if (message->state == THINKING)
         printf(" is thinking\n");
     if (message->state == FORK_HANDED)
