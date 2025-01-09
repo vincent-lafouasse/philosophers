@@ -9,14 +9,17 @@ NC='\033[0m'
 
 should_complete() {
     echo "${GREEN}=====SHOULD COMPLETE=====$NC"
+    sleep 1
 }
 
 should_continue() {
-    echo "${PURPLE}=====SHOULD CONTINUE=====$NC"
+    echo "${PURPLE}=====SHOULD GO ON ENDLESSLY=====$NC"
+    sleep 1
 }
 
 should_die() {
     echo "${RED}=====SHOULD DIE=====$NC"
+    sleep 1
 }
 
 if [ $# -eq 0 ]; then
