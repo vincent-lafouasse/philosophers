@@ -33,7 +33,8 @@ t_error track_progress(t_state* state) {
             t_instant last_meal = tracker.last_meals[i]
                                       ? tracker.last_meals[i]->timestamp
                                       : state->simulation_start;
-            if (duration_since(&last_meal).micros > state->cfg.time_to_die_us) {
+            if (duration_since(&last_meal).micros >
+                state->cfg.time_to_die_ms * 1000) {
                 printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
                        timestamp_ms(instant_now(), state->simulation_start),
                        i + 1, timestamp_ms(last_meal, state->simulation_start));

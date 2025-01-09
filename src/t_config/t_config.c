@@ -13,13 +13,13 @@ t_error load_config(int ac, char* av[], t_config* cfg) {
     err = checked_atou(av[1], &cfg->n_philosophers);
     if (err != NO_ERROR)
         return err;
-    err = checked_atou(av[2], &cfg->time_to_die_us);
+    err = checked_atou(av[2], &cfg->time_to_die_ms);
     if (err != NO_ERROR)
         return err;
-    err = checked_atou(av[3], &cfg->time_to_eat_us);
+    err = checked_atou(av[3], &cfg->time_to_eat_ms);
     if (err != NO_ERROR)
         return err;
-    err = checked_atou(av[4], &cfg->time_to_sleep_us);
+    err = checked_atou(av[4], &cfg->time_to_sleep_ms);
     if (err != NO_ERROR)
         return err;
     if (ac == 6) {
@@ -36,9 +36,9 @@ t_error load_config(int ac, char* av[], t_config* cfg) {
 void log_config(t_config cfg) {
     printf("config:\n");
     printf("%u diners\n", cfg.n_philosophers);
-    printf("life expectancy %u ms\n", cfg.time_to_die_us / 1000);
-    printf("dinner length %u ms\n", cfg.time_to_eat_us / 1000);
-    printf("nap length %u ms\n", cfg.time_to_sleep_us / 1000);
+    printf("life expectancy %u ms\n", cfg.time_to_die_ms);
+    printf("dinner length %u ms\n", cfg.time_to_eat_ms);
+    printf("nap length %u ms\n", cfg.time_to_sleep_ms);
     if (cfg.track_meals)
         printf("n meals %u\n", cfg.n_meals);
     printf("\n");

@@ -43,12 +43,12 @@ void* thread_routine(void* arg) {
 
     while (1) {
         if (self->state == THINKING) {
-            int delay_us =
-                (self->cfg.time_to_die_us - self->cfg.time_to_eat_us -
-                 self->cfg.time_to_sleep_us) /
+            int delay_ms =
+                (self->cfg.time_to_die_ms - self->cfg.time_to_eat_ms -
+                 self->cfg.time_to_sleep_ms) /
                 10;
-            if (delay_us > 0)
-                checked_sleep(delay_us);
+            if (delay_ms > 0)
+                checked_sleep(delay_ms * 1000);
             pthread_mutex_lock(self->first_fork);
             philosopher_set_state(self, FORK_HANDED);
             continue;
@@ -58,13 +58,13 @@ void* thread_routine(void* arg) {
             philosopher_set_state(self, EATING);
             continue;
         } else if (self->state == EATING) {
-            checked_sleep(self->cfg.time_to_eat_us);
+            checked_sleep(self->cfg.time_to_eat_ms * 1000);
             pthread_mutex_unlock(self->first_fork);
             pthread_mutex_unlock(self->second_fork);
             philosopher_set_state(self, SLEEPING);
             continue;
         } else if (self->state == SLEEPING) {
-            checked_sleep(self->cfg.time_to_sleep_us);
+            checked_sleep(self->cfg.time_to_sleep_ms * 1000);
             philosopher_set_state(self, THINKING);
             continue;
         } else {
