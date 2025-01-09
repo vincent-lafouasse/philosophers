@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:45:26 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:45:44 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/09 22:25:04 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ typedef enum e_error {
     E_OOM,
     E_PTHREAD_CREATE,
     E_PTHREAD_JOIN,
+    E_MUTEX_INIT,
     E_NOT_A_NUMBER,
     E_OVERFLOW,
     E_BADUSAGE,
