@@ -60,7 +60,7 @@ int main(int ac, char* av[]) {
                 printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
                        timestamp_ms(instant_now(), state.simulation_start),
                        i + 1, timestamp_ms(last_meal, state.simulation_start));
-                exit(1);
+                exit(0);
             }
         }
         if (state.messages->head) {
@@ -71,7 +71,9 @@ int main(int ac, char* av[]) {
                 tracker.last_meals[message->index] = message;
                 if (tracker.n_meals) {
                     tracker.n_meals[message->index] += 1;
-                    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+                    if (everyone_is_full(tracker.n_meals, cfg)) {
+                        printf("Everybody is full\n");
+                        exit(0);
                     }
                 }
             } else {
