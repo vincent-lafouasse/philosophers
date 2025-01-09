@@ -20,7 +20,7 @@
 typedef struct s_message		t_message;
 struct							s_message
 {
-	t_state			state;
+	t_state						state;
 	t_instant					timestamp;
 	u32							index;
 	t_message					*next;
@@ -36,6 +36,6 @@ struct							s_message_queue
 };
 
 t_error							mq_new(t_message_queue *out);
-t_error							mq_push(t_message_queue *mq,
-									t_state state, u32 index);
+t_error							mq_push(t_message_queue *mq, t_state state,
+									u32 index);
 t_message						*mq_pop(t_message_queue *mq);
