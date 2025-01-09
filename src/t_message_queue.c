@@ -9,7 +9,7 @@ void log_message(const t_message* message, t_instant start) {
     if (message->state == THINKING)
         printf(" is thinking\n");
     if (message->state == FORK_HANDED)
-        printf(" is has taken a fork\n");
+        printf(" has taken a fork\n");
     if (message->state == EATING)
         printf(" is eating\n");
     if (message->state == SLEEPING)
