@@ -37,6 +37,7 @@ int main(int ac, char* av[]) {
     t_tracker tracker = (t_tracker){
         .last_meals = malloc(cfg.n_philosophers * sizeof(t_message*)),
         .n_meals = NULL};
+    //.n_meals = malloc(cfg.n_philosophers * sizeof(u32))};
 
     while (1) {
         for (u32 i = 0; i < cfg.n_philosophers; i++) {
