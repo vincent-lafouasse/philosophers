@@ -22,7 +22,7 @@ t_error track_progress(t_state* state) {
     t_tracker tracker = (t_tracker){
         .last_meals = malloc(state->cfg.n_philosophers * sizeof(t_message*)),
         .n_meals = NULL};
-    if (state->cfg.n_meals) {
+    if (state->cfg.track_meals) {
         tracker.n_meals = malloc(state->cfg.n_philosophers * sizeof(u32));
         memset(tracker.n_meals, 0,
                state->cfg.n_philosophers * sizeof(*tracker.n_meals));
@@ -46,7 +46,7 @@ t_error track_progress(t_state* state) {
             if (message->state == EATING) {
                 free(tracker.last_meals[message->index]);
                 tracker.last_meals[message->index] = message;
-                if (tracker.n_meals) {
+                if (state->cfg.track_meals) {
                     tracker.n_meals[message->index] += 1;
                     if (everyone_is_full(tracker.n_meals, state->cfg)) {
                         printf("Everybody is full\n");

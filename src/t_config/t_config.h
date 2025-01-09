@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
+#include "t_error.h"
 
 typedef uint32_t u32;
 
@@ -11,7 +13,8 @@ struct s_config {
     u32 time_to_eat_us;
     u32 time_to_sleep_us;
     u32 n_meals;
+    bool track_meals;
 };
 
-t_config load_config(int ac, char* av[]);
+t_error load_config(int ac, char* av[], t_config* cfg);
 [[maybe_unused]] void log_config(t_config cfg);

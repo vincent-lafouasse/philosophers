@@ -2,27 +2,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "t_error.h"
 
 t_error checked_atou(const char* s, u32* out);
 
-t_config load_config(int ac, char* av[]) {
-    //if (ac != 5 && ac != 6)
+t_error load_config(int ac, char* av[], t_config* cfg) {
+    t_error err;
 
-    u32 n_philosophers = atoi(av[1]);
-    u32 time_to_die_ms = atoi(av[2]);
-    u32 time_to_eat_ms = atoi(av[3]);
-    u32 time_to_sleep_ms = atoi(av[4]);
-
-    u32 n_meals = (ac == 6) ? atoi(av[5]) : 0;
-
-    return (t_config){
-        .n_philosophers = n_philosophers,
-        .time_to_die_us = 1000 * time_to_die_ms,
-        .time_to_eat_us = 1000 * time_to_eat_ms,
-        .time_to_sleep_us = 1000 * time_to_sleep_ms,
-        .n_meals = n_meals,
-    };
+    if (ac != 5 && ac != 6)
+        return E_BADUSAGE;
+    err = checked_atou(av[1], &cfg->n_philosophers);
+    if (err != NO_ERROR)
+        return err;
+    err = checked_atou(av[2], &cfg->time_to_die_us);
+    if (err != NO_ERROR)
+        return err;
+    err = checked_atou(av[3], &cfg->time_to_eat_us);
+    if (err != NO_ERROR)
+        return err;
+    err = checked_atou(av[4], &cfg->time_to_sleep_us);
+    if (err != NO_ERROR)
+        return err;
+    if (ac == 6) {
+        err = checked_atou(av[5], &cfg->n_meals);
+        if (err != NO_ERROR)
+            return err;
+        cfg->track_meals = true;
+    } else {
+        cfg->track_meals = false;
+    }
+    return NO_ERROR;
 }
 
 void log_config(t_config cfg) {
@@ -31,7 +39,7 @@ void log_config(t_config cfg) {
     printf("life expectancy %u ms\n", cfg.time_to_die_us / 1000);
     printf("dinner length %u ms\n", cfg.time_to_eat_us / 1000);
     printf("nap length %u ms\n", cfg.time_to_sleep_us / 1000);
-    if (cfg.n_meals)
+    if (cfg.track_meals)
         printf("n meals %u\n", cfg.n_meals);
     printf("\n");
 }

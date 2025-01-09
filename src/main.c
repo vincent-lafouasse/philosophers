@@ -17,7 +17,14 @@ static t_error run(t_state* state);
 static void cleanup(t_state* state);
 
 int main(int ac, char* av[]) {
-    const t_config cfg = load_config(ac, av);
+    t_config cfg;
+    t_error err;
+
+    err = load_config(ac, av, &cfg);
+    if (err != NO_ERROR) {
+        printf("Failed to load config, error %s\n", "DUMMY");
+        exit(1);
+    }
     log_config(cfg);
 
     t_state state = init(cfg);
