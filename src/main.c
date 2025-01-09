@@ -12,7 +12,7 @@
 #include "t_state.h"
 #include "track/track.h"
 
-static t_state init(t_config cfg);
+static t_error init(t_config cfg, t_state* state);
 static t_error run(t_state* state);
 static void cleanup(t_state* state);
 
@@ -27,36 +27,38 @@ int main(int ac, char* av[]) {
     }
     log_config(cfg);
 
-    t_state state = init(cfg);
+    t_state state;
+    err = init(cfg, &state);
     run(&state);
     track_progress(&state);
     cleanup(&state);
 }
 
-static t_state init(t_config cfg) {
-    t_state out;
-
-    out = (t_state){
-        .philosophers = malloc(cfg.n_philosophers * sizeof(*out.philosophers)),
-        .forks = malloc(cfg.n_philosophers * sizeof(*out.forks)),
-        .messages = malloc(sizeof(*out.messages)),
-        .simulation_start = instant_now(),
-        .cfg = cfg};
-    if (!out.philosophers || !out.forks || !out.messages) {
-        free(out.philosophers);
-        free(out.forks);
-        return (t_state){0};
+static t_error init(t_config cfg, t_state* state) {
+    *state =
+        (t_state){.philosophers =
+                      malloc(cfg.n_philosophers * sizeof(*state->philosophers)),
+                  .forks = malloc(cfg.n_philosophers * sizeof(*state->forks)),
+                  .messages = malloc(sizeof(*state->messages)),
+                  .simulation_start = instant_now(),
+                  .cfg = cfg};
+    if (!state->philosophers || !state->forks || !state->messages) {
+        free(state->philosophers);
+        free(state->forks);
+        free(state->messages);
+        return E_OOM;
     }
-    *out.messages = mq_new();
+    *state->messages = mq_new();
 
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
-        pthread_mutex_init(out.forks + i, NULL);
+        pthread_mutex_init(state->forks + i, NULL);
     }
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
-        out.philosophers[i] = philosopher_new(i, out.forks, out.messages, cfg);
+        state->philosophers[i] =
+            philosopher_new(i, state->forks, state->messages, cfg);
 
-    return out;
+    return NO_ERROR;
 }
 
 static t_error run(t_state* state) {
