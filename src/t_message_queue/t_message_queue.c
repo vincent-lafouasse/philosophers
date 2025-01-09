@@ -1,52 +1,68 @@
-#include "t_message_queue.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_message_queue.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/09 22:34:28 by poss              #+#    #+#             */
+/*   Updated: 2025/01/09 22:34:38 by poss             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "t_error/t_error.h"
+#include "t_message_queue.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "t_error/t_error.h"
 
-t_error mq_new(t_message_queue* out) {
-    out->head = NULL;
-    out->tail = NULL;
-    if (pthread_mutex_init(&out->guard, NULL))
-        return E_MUTEX_INIT;
-    return NO_ERROR;
+t_error	mq_new(t_message_queue *out)
+{
+	out->head = NULL;
+	out->tail = NULL;
+	if (pthread_mutex_init(&out->guard, NULL))
+		return (E_MUTEX_INIT);
+	return (NO_ERROR);
 }
 
-t_error mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
-    t_message* message = malloc(sizeof(*message));
-    if (!message)
-        return E_OOM;
-    *message = (t_message){.state = state,
-                           .next = NULL,
-                           .prev = NULL,
-                           .timestamp = instant_now(),
-                           .index = index};
+t_error	mq_push(t_message_queue *mq, t_philosopher_state state, u32 index)
+{
+	t_message	*message;
 
-    pthread_mutex_lock(&mq->guard);
-    if (!mq->head) {
-        mq->head = message;
-        mq->tail = message;
-    } else {
-        message->prev = mq->tail;
-        mq->tail->next = message;
-        mq->tail = message;
-    }
-    pthread_mutex_unlock(&mq->guard);
-    return NO_ERROR;
+	message = malloc(sizeof(*message));
+	if (!message)
+		return (E_OOM);
+	*message = (t_message){.state = state, .next = NULL, .prev = NULL,
+		.timestamp = instant_now(), .index = index};
+	pthread_mutex_lock(&mq->guard);
+	if (!mq->head)
+	{
+		mq->head = message;
+		mq->tail = message;
+	}
+	else
+	{
+		message->prev = mq->tail;
+		mq->tail->next = message;
+		mq->tail = message;
+	}
+	pthread_mutex_unlock(&mq->guard);
+	return (NO_ERROR);
 }
 
-t_message* mq_pop(t_message_queue* mq) {
-    pthread_mutex_lock(&mq->guard);
-    if (!mq->head) {
-        pthread_mutex_unlock(&mq->guard);
-        return NULL;
-    }
-    t_message* out = mq->head;
+t_message	*mq_pop(t_message_queue *mq)
+{
+	t_message	*out;
 
-    if (out->next != NULL)
-        out->next->prev = NULL;
-    mq->head = out->next;
-    pthread_mutex_unlock(&mq->guard);
-
-    return out;
+	pthread_mutex_lock(&mq->guard);
+	if (!mq->head)
+	{
+		pthread_mutex_unlock(&mq->guard);
+		return (NULL);
+	}
+	out = mq->head;
+	if (out->next != NULL)
+		out->next->prev = NULL;
+	mq->head = out->next;
+	pthread_mutex_unlock(&mq->guard);
+	return (out);
 }
