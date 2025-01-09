@@ -2,35 +2,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "t_error/t_error.h"
 
-void log_message(const t_message* message, t_instant start) {
-    printf("%06u %u", timestamp_ms(message->timestamp, start),
-           message->index + 1);
-    if (message->state == THINKING)
-        printf(" is thinking\n");
-    if (message->state == FORK_HANDED)
-        printf(" has taken a fork\n");
-    if (message->state == EATING)
-        printf(" is eating\n");
-    if (message->state == SLEEPING)
-        printf(" is sleeping\n");
-    if (message->state == DEAD)
-        printf(" is ded\n");
+t_error mq_new(t_message_queue* out) {
+    out->head = NULL;
+    out->tail = NULL;
+    if (pthread_mutex_init(&out->guard, NULL))
+        return E_MUTEX_INIT;
+    return NO_ERROR;
 }
 
-t_message_queue mq_new(void) {
-    t_message_queue out;
-
-    out.head = NULL;
-    out.tail = NULL;
-    pthread_mutex_init(&out.guard, NULL);
-    return out;
-}
-
-bool mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
+t_error mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
     t_message* message = malloc(sizeof(*message));
     if (!message)
-        return false;
+        return E_OOM;
     *message = (t_message){.state = state,
                            .next = NULL,
                            .prev = NULL,
@@ -47,7 +32,7 @@ bool mq_push(t_message_queue* mq, t_philosopher_state state, u32 index) {
         mq->tail = message;
     }
     pthread_mutex_unlock(&mq->guard);
-    return true;
+    return NO_ERROR;
 }
 
 t_message* mq_pop(t_message_queue* mq) {

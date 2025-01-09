@@ -48,7 +48,9 @@ static t_error init(t_config cfg, t_state* state) {
         free(state->messages);
         return E_OOM;
     }
-    *state->messages = mq_new();
+    t_error err = mq_new(state->messages);
+    if (err != NO_ERROR)
+        return err;
 
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(state->forks + i, NULL);
