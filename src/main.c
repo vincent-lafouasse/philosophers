@@ -9,12 +9,12 @@
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 #include "t_philosopher.h"
-#include "t_state.h"
+#include "t_table.h"
 #include "track/track.h"
 
-static t_error init(t_config cfg, t_state* state);
-static t_error run(t_state* state);
-static void cleanup(t_state* state);
+static t_error init(t_config cfg, t_table* table);
+static t_error run(t_table* table);
+static void cleanup(t_table* table);
 
 int main(int ac, char* av[]) {
     t_config cfg;
@@ -27,53 +27,53 @@ int main(int ac, char* av[]) {
     }
     log_config(cfg);
 
-    t_state state;
-    err = init(cfg, &state);
-    run(&state);
-    track_progress(&state);
-    cleanup(&state);
+    t_table table;
+    err = init(cfg, &table);
+    run(&table);
+    track_progress(&table);
+    cleanup(&table);
 }
 
-static t_error init(t_config cfg, t_state* state) {
-    *state =
-        (t_state){.philosophers =
-                      malloc(cfg.n_philosophers * sizeof(*state->philosophers)),
-                  .forks = malloc(cfg.n_philosophers * sizeof(*state->forks)),
-                  .messages = malloc(sizeof(*state->messages)),
+static t_error init(t_config cfg, t_table* table) {
+    *table =
+        (t_table){.philosophers =
+                      malloc(cfg.n_philosophers * sizeof(*table->philosophers)),
+                  .forks = malloc(cfg.n_philosophers * sizeof(*table->forks)),
+                  .messages = malloc(sizeof(*table->messages)),
                   .simulation_start = instant_now(),
                   .cfg = cfg};
-    if (!state->philosophers || !state->forks || !state->messages) {
-        free(state->philosophers);
-        free(state->forks);
-        free(state->messages);
+    if (!table->philosophers || !table->forks || !table->messages) {
+        free(table->philosophers);
+        free(table->forks);
+        free(table->messages);
         return E_OOM;
     }
-    t_error err = mq_new(state->messages);
+    t_error err = mq_new(table->messages);
     if (err != NO_ERROR)
         return err;
 
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
-        pthread_mutex_init(state->forks + i, NULL);
+        pthread_mutex_init(table->forks + i, NULL);
     }
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
-        state->philosophers[i] =
-            philosopher_new(i, state->forks, state->messages, cfg);
+        table->philosophers[i] =
+            philosopher_new(i, table->forks, table->messages, cfg);
 
     return NO_ERROR;
 }
 
-static t_error run(t_state* state) {
-    for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-        philosopher_start(state->philosophers + i);  // fallible
+static t_error run(t_table* table) {
+    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        philosopher_start(table->philosophers + i);  // fallible
     }
 
-    for (u32 i = 0; i < state->cfg.n_philosophers; i++) {
-        pthread_detach(state->philosophers[i].thread);
+    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        pthread_detach(table->philosophers[i].thread);
     }
     return NO_ERROR;
 }
 
-static void cleanup(t_state* state) {
-    (void)state;
+static void cleanup(t_table* table) {
+    (void)table;
 }

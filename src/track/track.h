@@ -1,6 +1,6 @@
 #pragma once
 
 #include "t_error/t_error.h"
-#include "t_state.h"
+#include "t_table.h"
 
-t_error track_progress(t_state* state);
+t_error track_progress(t_table* table);
