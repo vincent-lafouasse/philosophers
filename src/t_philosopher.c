@@ -30,7 +30,7 @@ t_philosopher philosopher_new(u32 index,
     };
 }
 
-void philosopher_set_state(t_philosopher* self, t_philosopher_state new_state) {
+void philosopher_set_state(t_philosopher* self, t_state new_state) {
     pthread_mutex_lock(&self->state_lock);
     self->state = new_state;
     pthread_mutex_unlock(&self->state_lock);

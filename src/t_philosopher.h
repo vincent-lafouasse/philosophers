@@ -7,8 +7,8 @@
 struct s_message_queue;
 typedef struct s_message_queue t_message_queue;
 
-typedef enum e_philosopher_state t_philosopher_state;
-enum e_philosopher_state {
+typedef enum e_state t_state;
+enum e_state {
     THINKING,
     FORK_HANDED,
     EATING,
@@ -23,7 +23,7 @@ struct s_philosopher {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
-    t_philosopher_state state;
+    t_state state;
     pthread_mutex_t state_lock;
     t_message_queue* messages;
     t_config cfg;
