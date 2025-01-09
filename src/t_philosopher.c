@@ -48,6 +48,7 @@ void* thread_routine(void* arg) {
             continue;
         } else if (self->state == FORK_HANDED) {
             pthread_mutex_lock(self->second_fork);
+            mq_push(self->messages, FORK_HANDED, self->index);
             philosopher_set_state(self, EATING);
             continue;
         } else if (self->state == EATING) {
