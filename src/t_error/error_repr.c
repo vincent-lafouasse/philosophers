@@ -21,22 +21,23 @@
 #define E_BADUSAGE_REPR "Bad usage"
 #define E_MUTEX_INIT_REPR "Failed to init mutex"
 
-const char* error_repr(t_error err) {
-    if (err == NO_ERROR)
-        return NO_ERROR_REPR;
-    if (err == E_OOM)
-        return E_OOM_REPR;
-    if (err == E_PTHREAD_CREATE)
-        return E_PTHREAD_CREATE_REPR;
-    if (err == E_PTHREAD_JOIN)
-        return E_PTHREAD_JOIN_REPR;
-    if (err == E_NOT_A_NUMBER)
-        return E_NOT_A_NUMBER_REPR;
-    if (err == E_OVERFLOW)
-        return E_OVERFLOW_REPR;
-    if (err == E_BADUSAGE)
-        return E_BADUSAGE_REPR;
-    if (err == E_MUTEX_INIT)
-        return E_MUTEX_INIT_REPR;
-    return "Unreachable";
+const char	*error_repr(t_error err)
+{
+	if (err == NO_ERROR)
+		return (NO_ERROR_REPR);
+	if (err == E_OOM)
+		return (E_OOM_REPR);
+	if (err == E_PTHREAD_CREATE)
+		return (E_PTHREAD_CREATE_REPR);
+	if (err == E_PTHREAD_JOIN)
+		return (E_PTHREAD_JOIN_REPR);
+	if (err == E_NOT_A_NUMBER)
+		return (E_NOT_A_NUMBER_REPR);
+	if (err == E_OVERFLOW)
+		return (E_OVERFLOW_REPR);
+	if (err == E_BADUSAGE)
+		return (E_BADUSAGE_REPR);
+	if (err == E_MUTEX_INIT)
+		return (E_MUTEX_INIT_REPR);
+	return ("Unreachable");
 }
