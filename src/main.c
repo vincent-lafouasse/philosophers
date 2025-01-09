@@ -7,7 +7,7 @@
 
 #include "ft_time.h"
 #include "t_config/t_config.h"
-#include "t_message_queue.h"
+#include "t_message_queue/t_message_queue.h"
 #include "t_philosopher.h"
 #include "t_state.h"
 #include "track/track.h"

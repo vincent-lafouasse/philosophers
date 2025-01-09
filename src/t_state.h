@@ -1,6 +1,6 @@
 #pragma once
 
-#include "t_message_queue.h"
+#include "t_message_queue/t_message_queue.h"
 #include "t_philosopher.h"
 
 typedef struct s_state {

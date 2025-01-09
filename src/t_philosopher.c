@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "ft_time.h"
-#include "t_message_queue.h"
+#include "t_message_queue/t_message_queue.h"
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
