@@ -5,4 +5,6 @@ typedef enum e_error {
     E_OOM,
     E_PTHREAD_CREATE,
     E_PTHREAD_JOIN,
+    E_NOT_A_NUMBER,
+    E_OVERFLOW,
 } t_error;
