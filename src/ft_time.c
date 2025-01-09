@@ -1,6 +1,7 @@
 #include "ft_time.h"
 #include <stddef.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 t_instant instant_now(void) {
     t_instant now;
@@ -26,4 +27,12 @@ t_duration duration_difference(const t_instant* to, const t_instant* from) {
 u32 timestamp_ms(t_instant instant, t_instant start) {
     t_duration duration = duration_difference(&instant, &start);
     return duration.micros / 1000;
+}
+
+void checked_sleep(u32 us) {
+    t_instant start = instant_now();
+
+    while (duration_since(&start).micros < us) {
+        usleep(250);
+    }
 }

@@ -10,8 +10,6 @@
 #include "t_message_queue.h"
 #include "t_philosopher.h"
 
-void sleep_ms(u32 ms);
-
 typedef struct {
     t_philosopher* philosophers;
     pthread_mutex_t* forks;
@@ -23,10 +21,6 @@ typedef struct {
 static t_state init(t_config cfg);
 static t_error run(t_state* state);
 static void cleanup(t_state* state);
-
-void sleep_ms(u32 ms) {
-    usleep(ms * 1000);
-}
 
 typedef struct {
     t_message** last_meals;
@@ -65,8 +59,6 @@ int main(int ac, char* av[]) {
             } else {
                 free(message);
             }
-        } else {
-            sleep_ms(1);
         }
     }
 

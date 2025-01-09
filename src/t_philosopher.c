@@ -52,13 +52,13 @@ void* thread_routine(void* arg) {
             philosopher_set_state(self, EATING);
             continue;
         } else if (self->state == EATING) {
-            usleep(self->cfg.time_to_eat_us);
+            checked_sleep(self->cfg.time_to_eat_us);
             pthread_mutex_unlock(self->first_fork);
             pthread_mutex_unlock(self->second_fork);
             philosopher_set_state(self, SLEEPING);
             continue;
         } else if (self->state == SLEEPING) {
-            usleep(self->cfg.time_to_sleep_us);
+            checked_sleep(self->cfg.time_to_sleep_us);
             philosopher_set_state(self, THINKING);
             continue;
         } else {
