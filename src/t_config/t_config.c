@@ -6,14 +6,14 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:40:55 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/09 21:50:51 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_config.h"
 #include <stdio.h>
 
-t_error			checked_atou(const char *s, u32 *out);
+t_error			checked_atou(const char *s, t_u32 *out);
 
 static t_error	load_timers(char *av[], t_config *cfg)
 {

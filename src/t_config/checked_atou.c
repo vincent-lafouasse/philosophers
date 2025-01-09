@@ -6,11 +6,11 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:17 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:36:19 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/09 21:51:02 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "t_error.h"
+#include "t_error/t_error.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>

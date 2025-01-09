@@ -6,13 +6,13 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:33 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:38:05 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/09 21:49:52 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "t_error.h"
+#include "t_error/t_error.h"
 #include <stdbool.h>
 #include <stdint.h>
 

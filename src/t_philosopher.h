@@ -2,7 +2,7 @@
 
 #include <pthread.h>
 #include "t_config/t_config.h"
-#include "t_error.h"
+#include "t_error/t_error.h"
 
 struct s_message_queue;
 typedef struct s_message_queue t_message_queue;
@@ -19,7 +19,7 @@ enum e_philosopher_state {
 typedef struct s_philosopher t_philosopher;
 struct s_philosopher {
     pthread_t thread;
-    u32 index;
+    t_u32 index;
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
@@ -29,7 +29,7 @@ struct s_philosopher {
     t_config cfg;
 };
 
-t_philosopher philosopher_new(u32 index,
+t_philosopher philosopher_new(t_u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
                               t_config cfg);
