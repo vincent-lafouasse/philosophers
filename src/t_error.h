@@ -7,4 +7,5 @@ typedef enum e_error {
     E_PTHREAD_JOIN,
     E_NOT_A_NUMBER,
     E_OVERFLOW,
+    E_BADUSAGE,
 } t_error;
