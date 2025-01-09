@@ -46,7 +46,7 @@ void* thread_routine(void* arg) {
             int delay_us =
                 (self->cfg.time_to_die_us - self->cfg.time_to_eat_us -
                  self->cfg.time_to_sleep_us) /
-                2;
+                10;
             if (delay_us > 0)
                 checked_sleep(delay_us);
             pthread_mutex_lock(self->first_fork);
