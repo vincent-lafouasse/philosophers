@@ -27,6 +27,14 @@ typedef struct {
     u32* n_meals;
 } t_tracker;
 
+bool everyone_is_full(u32* n_meals, t_config cfg) {
+    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+        if (n_meals[i] < cfg.n_meals)
+            return false;
+    }
+    return true;
+}
+
 int main(int ac, char* av[]) {
     const t_config cfg = load_config(ac, av);
     log_config(cfg);
@@ -37,7 +45,11 @@ int main(int ac, char* av[]) {
     t_tracker tracker = (t_tracker){
         .last_meals = malloc(cfg.n_philosophers * sizeof(t_message*)),
         .n_meals = NULL};
-    //.n_meals = malloc(cfg.n_philosophers * sizeof(u32))};
+    if (cfg.n_meals) {
+        tracker.n_meals = malloc(cfg.n_philosophers * sizeof(u32));
+        memset(tracker.n_meals, 0,
+               cfg.n_philosophers * sizeof(*tracker.n_meals));
+    }
 
     while (1) {
         for (u32 i = 0; i < cfg.n_philosophers; i++) {
@@ -57,6 +69,11 @@ int main(int ac, char* av[]) {
             if (message->state == EATING) {
                 free(tracker.last_meals[message->index]);
                 tracker.last_meals[message->index] = message;
+                if (tracker.n_meals) {
+                    tracker.n_meals[message->index] += 1;
+                    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+                    }
+                }
             } else {
                 free(message);
             }
