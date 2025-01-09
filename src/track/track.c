@@ -18,6 +18,21 @@ typedef struct {
 
 static bool everyone_is_full(u32* n_meals, t_config cfg);
 
+void log_message(const t_message* message, t_instant start) {
+    printf("%06u %u", timestamp_ms(message->timestamp, start),
+           message->index + 1);
+    if (message->state == THINKING)
+        printf(" is thinking\n");
+    if (message->state == FORK_HANDED)
+        printf(" has taken a fork\n");
+    if (message->state == EATING)
+        printf(" is eating\n");
+    if (message->state == SLEEPING)
+        printf(" is sleeping\n");
+    if (message->state == DEAD)
+        printf(" is ded\n");
+}
+
 t_error track_progress(t_state* state) {
     t_tracker tracker = (t_tracker){
         .last_meals = malloc(state->cfg.n_philosophers * sizeof(t_message*)),

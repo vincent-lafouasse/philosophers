@@ -24,4 +24,3 @@ struct s_message_queue {
 t_message_queue mq_new(void);
 bool mq_push(t_message_queue* mq, t_philosopher_state state, u32 index);
 t_message* mq_pop(t_message_queue* mq);
-void log_message(const t_message* message, t_instant start);
