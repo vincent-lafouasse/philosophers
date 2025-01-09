@@ -28,6 +28,11 @@ void sleep_ms(u32 ms) {
     usleep(ms * 1000);
 }
 
+typedef struct {
+    t_message** last_meals;
+    u32* n_meals;
+} t_tracker;
+
 int main(int ac, char* av[]) {
     const t_config cfg = load_config(ac, av);
     log_config(cfg);
@@ -35,12 +40,15 @@ int main(int ac, char* av[]) {
     t_state state = init(cfg);
     run(&state);
 
-    t_message** last_meals = malloc(cfg.n_philosophers * sizeof(t_message*));
+    t_tracker tracker = (t_tracker){
+        .last_meals = malloc(cfg.n_philosophers * sizeof(t_message*)),
+        .n_meals = NULL};
 
     while (1) {
         for (u32 i = 0; i < cfg.n_philosophers; i++) {
-            t_instant last_meal = last_meals[i] ? last_meals[i]->timestamp
-                                                : state.simulation_start;
+            t_instant last_meal = tracker.last_meals[i]
+                                      ? tracker.last_meals[i]->timestamp
+                                      : state.simulation_start;
             if (duration_since(&last_meal).micros > cfg.time_to_die_us) {
                 printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
                        timestamp_ms(instant_now(), state.simulation_start),
@@ -52,8 +60,8 @@ int main(int ac, char* av[]) {
             t_message* message = mq_pop(state.messages);
             log_message(message, state.simulation_start);
             if (message->state == EATING) {
-                free(last_meals[message->index]);
-                last_meals[message->index] = message;
+                free(tracker.last_meals[message->index]);
+                tracker.last_meals[message->index] = message;
             } else {
                 free(message);
             }
