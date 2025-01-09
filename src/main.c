@@ -22,7 +22,7 @@ int main(int ac, char* av[]) {
 
     err = load_config(ac, av, &cfg);
     if (err != NO_ERROR) {
-        printf("Failed to load config, error %s\n", "DUMMY");
+        printf("Failed to load config, %s\n", error_repr(err));
         exit(1);
     }
     log_config(cfg);
