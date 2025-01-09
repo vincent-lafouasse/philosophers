@@ -1,7 +1,7 @@
 #pragma once
 
 #include <pthread.h>
-#include "t_config.h"
+#include "t_config/t_config.h"
 #include "t_error.h"
 
 struct s_message_queue;
