@@ -24,7 +24,6 @@ struct s_philosopher {
     pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
     t_state state;
-    pthread_mutex_t state_lock;
     t_message_queue* messages;
     t_config cfg;
 };

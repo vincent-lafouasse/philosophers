@@ -31,9 +31,7 @@ t_philosopher philosopher_new(u32 index,
 }
 
 void philosopher_set_state(t_philosopher* self, t_state new_state) {
-    pthread_mutex_lock(&self->state_lock);
     self->state = new_state;
-    pthread_mutex_unlock(&self->state_lock);
     mq_push(self->messages, new_state, self->index);
 }
 
@@ -74,8 +72,6 @@ void* thread_routine(void* arg) {
 }
 
 t_error philosopher_start(t_philosopher* self) {
-    pthread_mutex_init(&self->state_lock, NULL);
-
     int status = pthread_create(&self->thread, NULL, thread_routine, self);
 
     if (status == 0)
