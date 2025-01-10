@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "ft_time.h"
+#include "t_big_red_button.h"
 #include "t_message_queue/t_message_queue.h"
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
+                              t_big_red_button* abort_button,
                               t_config cfg) {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
@@ -27,6 +29,7 @@ t_philosopher philosopher_new(u32 index,
         .second_fork = second_fork,
         .state = THINKING,
         .messages = messages,
+        .abort_button = abort_button,
     };
 }
 

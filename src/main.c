@@ -63,7 +63,7 @@ static t_error init(t_config cfg, t_table* table) {
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
         table->philosophers[i] =
-            philosopher_new(i, table->forks, table->messages, cfg);
+            philosopher_new(i, table->forks, table->messages, &table->abort_button, cfg);
 
     return NO_ERROR;
 }
