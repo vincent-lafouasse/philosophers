@@ -42,6 +42,8 @@ void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
 
     while (1) {
+        if (must_abort(self->abort_button))
+            return NULL;
         if (self->state == THINKING) {
             int delay_ms =
                 (self->cfg.time_to_die_ms - self->cfg.time_to_eat_ms -
