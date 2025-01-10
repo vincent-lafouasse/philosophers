@@ -2,6 +2,7 @@
 
 #include "t_message_queue/t_message_queue.h"
 #include "t_philosopher.h"
+#include "t_big_red_button.h"
 #include <stdbool.h>
 
 typedef struct s_table {
@@ -9,7 +10,6 @@ typedef struct s_table {
     pthread_mutex_t* forks;
     t_message_queue* messages;
     t_instant simulation_start;
-    bool abort;
-    pthread_mutex_t abort_guard;
+    t_big_red_button abort_button;
     t_config cfg;
 } t_table;
