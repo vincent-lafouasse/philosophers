@@ -41,6 +41,7 @@ static t_error init(t_config cfg, t_table* table) {
                   .forks = malloc(cfg.n_philosophers * sizeof(*table->forks)),
                   .messages = malloc(sizeof(*table->messages)),
                   .simulation_start = instant_now(),
+                  .abort = false,
                   .cfg = cfg};
     if (!table->philosophers || !table->forks || !table->messages) {
         free(table->philosophers);
@@ -55,6 +56,7 @@ static t_error init(t_config cfg, t_table* table) {
     for (u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(table->forks + i, NULL);
     }
+    pthread_mutex_init(&table->abort_guard, NULL);
 
     for (u32 i = 0; i < cfg.n_philosophers; i++)
         table->philosophers[i] =
