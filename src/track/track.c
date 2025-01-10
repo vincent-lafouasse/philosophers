@@ -10,6 +10,12 @@
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 
+#ifdef VERBOSE
+#define VERBOSITY 1
+#else
+#define VERBOSITY 0
+#endif
+
 typedef uint32_t u32;
 
 typedef struct {
@@ -30,8 +36,16 @@ void log_message(const t_message* message, t_instant start) {
         printf(" is eating\n");
     if (message->state == SLEEPING)
         printf(" is sleeping\n");
-    if (message->state == DEAD)
-        printf(" is ded\n");
+}
+
+void log_death(u32 philo, t_instant start, t_instant last_meal) {
+    if (VERBOSITY == 1)
+        printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
+               timestamp_ms(instant_now(), start), philo + 1,
+               timestamp_ms(last_meal, start));
+    else
+        printf("%06u %u has died\n", timestamp_ms(instant_now(), start),
+               philo + 1);
 }
 
 t_error track_progress_inner(t_table* table, t_tracker* tracker);
