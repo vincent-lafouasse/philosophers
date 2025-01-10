@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ft_time.h"
+#include "t_big_red_button.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 
@@ -33,6 +34,8 @@ void log_message(const t_message* message, t_instant start) {
         printf(" is ded\n");
 }
 
+t_error track_progress_inner(t_table* table, t_tracker* tracker);
+
 t_error track_progress(t_table* table) {
     t_tracker tracker = (t_tracker){
         .last_meals = malloc(table->cfg.n_philosophers * sizeof(t_message*)),
@@ -53,7 +56,8 @@ t_error track_progress(t_table* table) {
                 printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
                        timestamp_ms(instant_now(), table->simulation_start),
                        i + 1, timestamp_ms(last_meal, table->simulation_start));
-                exit(0);
+                big_red_button_press(&table->abort_button);
+                break;
             }
         }
         if (table->messages->head) {
