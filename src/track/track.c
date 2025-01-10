@@ -100,8 +100,9 @@ t_error track_progress(t_table* table) {
         memset(tracker.n_meals, 0,
                table->cfg.n_philosophers * sizeof(*tracker.n_meals));
     }
-    while (track_progress_inner(table, &tracker) == CONTINUE)
-        ;
+    while (track_progress_inner(table, &tracker) == CONTINUE);
+    free(tracker.last_meals);
+    free(tracker.n_meals);
     return NO_ERROR;
 }
 
