@@ -43,9 +43,10 @@ void* thread_routine(void* arg) {
     while (1) {
         if (self->state == THINKING) {
             int delay_ms =
-                (self->cfg.time_to_die_ms - self->cfg.time_to_eat_ms -
-                 self->cfg.time_to_sleep_ms) /
+                ((int)self->cfg.time_to_die_ms - (int)self->cfg.time_to_eat_ms -
+                 (int)self->cfg.time_to_sleep_ms) /
                 10;
+            printf("delay: %ims\n", delay_ms);
             if (delay_ms > 0)
                 checked_sleep(delay_ms * 1000);
             pthread_mutex_lock(self->first_fork);
