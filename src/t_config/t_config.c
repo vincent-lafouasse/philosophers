@@ -6,12 +6,13 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:50:51 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/11 17:32:51 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_config.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 t_error			checked_atou(const char *s, t_u32 *out);
 
@@ -22,6 +23,11 @@ static t_error	load_timers(char *av[], t_config *cfg)
 	err = checked_atou(av[1], &cfg->n_philosophers);
 	if (err != NO_ERROR)
 		return (err);
+	if (cfg->n_philosophers == 1)
+	{
+		printf("todo\n");
+		exit(1);
+	}
 	err = checked_atou(av[2], &cfg->time_to_die_ms);
 	if (err != NO_ERROR)
 		return (err);
