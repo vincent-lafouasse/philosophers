@@ -72,13 +72,13 @@ static t_error run(t_table* table) {
     for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
         philosopher_start(table->philosophers + i);  // fallible
     }
-
-    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
-        pthread_detach(table->philosophers[i].thread);
-    }
     return NO_ERROR;
 }
 
 static void cleanup(t_table* table) {
     (void)table;
+    printf("cleanup\n");
+    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        pthread_join(table->philosophers[i].thread, NULL);
+    }
 }
