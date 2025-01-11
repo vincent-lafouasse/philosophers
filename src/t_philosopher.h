@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include "t_config/t_config.h"
 #include "t_error/t_error.h"
+#include "t_big_red_button.h"
 
 struct s_message_queue;
 typedef struct s_message_queue t_message_queue;
@@ -24,13 +25,14 @@ struct s_philosopher {
     pthread_mutex_t* second_fork;
     pthread_mutex_t* output_lock;
     t_state state;
-    pthread_mutex_t state_lock;
     t_message_queue* messages;
+    t_big_red_button* abort_button;
     t_config cfg;
 };
 
 t_philosopher philosopher_new(t_u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
+                              t_big_red_button* abort_button,
                               t_config cfg);
 t_error philosopher_start(t_philosopher* self);

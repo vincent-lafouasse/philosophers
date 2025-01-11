@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "ft_time.h"
+#include "t_big_red_button.h"
 #include "t_message_queue/t_message_queue.h"
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
+                              t_big_red_button* abort_button,
                               t_config cfg) {
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
@@ -27,13 +29,12 @@ t_philosopher philosopher_new(u32 index,
         .second_fork = second_fork,
         .state = THINKING,
         .messages = messages,
+        .abort_button = abort_button,
     };
 }
 
 void philosopher_set_state(t_philosopher* self, t_state new_state) {
-    pthread_mutex_lock(&self->state_lock);
     self->state = new_state;
-    pthread_mutex_unlock(&self->state_lock);
     mq_push(self->messages, new_state, self->index);
 }
 
@@ -41,12 +42,15 @@ void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
 
     while (1) {
+        if (must_abort(self->abort_button)) {
+            printf("philo %u shutdown\n", self->index + 1);
+            return NULL;
+        }
         if (self->state == THINKING) {
             int delay_ms =
                 ((int)self->cfg.time_to_die_ms - (int)self->cfg.time_to_eat_ms -
                  (int)self->cfg.time_to_sleep_ms) /
                 10;
-            printf("delay: %ims\n", delay_ms);
             if (delay_ms > 0)
                 checked_sleep(delay_ms * 1000);
             pthread_mutex_lock(self->first_fork);
@@ -75,8 +79,6 @@ void* thread_routine(void* arg) {
 }
 
 t_error philosopher_start(t_philosopher* self) {
-    pthread_mutex_init(&self->state_lock, NULL);
-
     int status = pthread_create(&self->thread, NULL, thread_routine, self);
 
     if (status == 0)

@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "ft_time.h"
+#include "t_big_red_button.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 #include "t_philosopher.h"
@@ -56,9 +57,13 @@ static t_error init(t_config cfg, t_table* table) {
         pthread_mutex_init(table->forks + i, NULL);
     }
 
+    err = big_red_button_init(&table->abort_button);
+    if (err != NO_ERROR)
+        return err;
+
     for (u32 i = 0; i < cfg.n_philosophers; i++)
         table->philosophers[i] =
-            philosopher_new(i, table->forks, table->messages, cfg);
+            philosopher_new(i, table->forks, table->messages, &table->abort_button, cfg);
 
     return NO_ERROR;
 }
@@ -67,13 +72,13 @@ static t_error run(t_table* table) {
     for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
         philosopher_start(table->philosophers + i);  // fallible
     }
-
-    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
-        pthread_detach(table->philosophers[i].thread);
-    }
     return NO_ERROR;
 }
 
 static void cleanup(t_table* table) {
     (void)table;
+    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        pthread_join(table->philosophers[i].thread, NULL);
+    }
+    printf("cleanup\n");
 }

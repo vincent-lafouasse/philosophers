@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ft_time.h"
+#include "t_big_red_button.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 
@@ -37,7 +38,7 @@ void log_message(const t_message* message, t_instant start) {
         printf(" is sleeping\n");
 }
 
-void log_death(u32 philo, t_instant start, t_instant last_meal) {
+void log_death(t_u32 philo, t_instant start, t_instant last_meal) {
     if (VERBOSITY == 1)
         printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
                timestamp_ms(instant_now(), start), philo + 1,
@@ -47,47 +48,62 @@ void log_death(u32 philo, t_instant start, t_instant last_meal) {
                philo + 1);
 }
 
+typedef enum e_simulation_status { CONTINUE, DONE } t_simulation_status;
+
+t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
+    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        t_instant last_meal = tracker->last_meals[i]
+                                  ? tracker->last_meals[i]->timestamp
+                                  : table->simulation_start;
+        if (duration_since(&last_meal).micros >
+            table->cfg.time_to_die_ms * 1000) {
+            big_red_button_press(&table->abort_button);
+            log_death(i, table->simulation_start, last_meal);
+            return DONE;
+        }
+    }
+    if (table->messages->head) {
+        t_message* message = mq_pop(table->messages);
+        log_message(message, table->simulation_start);
+        if (message->state == EATING) {
+            free(tracker->last_meals[message->index]);
+            tracker->last_meals[message->index] = message;
+            if (table->cfg.track_meals) {
+                tracker->n_meals[message->index] += 1;
+                if (everyone_is_full(tracker->n_meals, table->cfg)) {
+                    big_red_button_press(&table->abort_button);
+                    printf("Everybody is full\n");
+                    return DONE;
+                }
+            }
+        } else {
+            free(message);
+        }
+    }
+    return CONTINUE;
+}
+
 t_error track_progress(t_table* table) {
-    t_tracker tracker = (t_tracker){
+    t_tracker tracker;
+
+    tracker = (t_tracker){
         .last_meals = malloc(table->cfg.n_philosophers * sizeof(t_message*)),
         .n_meals = NULL};
+    if (tracker.last_meals == NULL) {
+        return E_OOM;
+    }
     if (table->cfg.track_meals) {
         tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(u32));
+        if (tracker.n_meals == NULL) {
+            return free(tracker.last_meals), E_OOM;
+        }
         memset(tracker.n_meals, 0,
                table->cfg.n_philosophers * sizeof(*tracker.n_meals));
     }
-
-    while (1) {
-        for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
-            t_instant last_meal = tracker.last_meals[i]
-                                      ? tracker.last_meals[i]->timestamp
-                                      : table->simulation_start;
-            if (duration_since(&last_meal).micros >
-                table->cfg.time_to_die_ms * 1000) {
-                printf("%06u %u HAS NOT EATEN SINCE %06u AND FUCKING DIED\n",
-                       timestamp_ms(instant_now(), table->simulation_start),
-                       i + 1, timestamp_ms(last_meal, table->simulation_start));
-                exit(0);
-            }
-        }
-        if (table->messages->head) {
-            t_message* message = mq_pop(table->messages);
-            log_message(message, table->simulation_start);
-            if (message->state == EATING) {
-                free(tracker.last_meals[message->index]);
-                tracker.last_meals[message->index] = message;
-                if (table->cfg.track_meals) {
-                    tracker.n_meals[message->index] += 1;
-                    if (everyone_is_full(tracker.n_meals, table->cfg)) {
-                        printf("Everybody is full\n");
-                        exit(0);
-                    }
-                }
-            } else {
-                free(message);
-            }
-        }
-    }
+    while (track_progress_inner(table, &tracker) == CONTINUE);
+    free(tracker.last_meals);
+    free(tracker.n_meals);
+    return NO_ERROR;
 }
 
 static bool everyone_is_full(u32* n_meals, t_config cfg) {
