@@ -5,6 +5,12 @@
 #include "time/ft_time.h"
 #include "t_message_queue/t_message_queue.h"
 
+#ifdef VERBOSE
+#define VERBOSITY 1
+#else
+#define VERBOSITY 0
+#endif
+
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
@@ -42,7 +48,8 @@ void* thread_routine(void* arg) {
 
     while (1) {
         if (must_abort(self->abort_button)) {
-            printf("philo %u shutdown\n", self->index + 1);
+            if (VERBOSITY == 1)
+                printf("philo %u shutdown\n", self->index + 1);
             return NULL;
         }
         if (self->state == THINKING) {
