@@ -2,8 +2,15 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "t_table/t_big_red_button.h"
 #include "time/ft_time.h"
 #include "t_message_queue/t_message_queue.h"
+
+#ifdef DEBUG
+#define VERBOSITY 1
+#else
+#define VERBOSITY 0
+#endif
 
 t_philosopher philosopher_new(u32 index,
                               pthread_mutex_t* forks,
@@ -34,7 +41,11 @@ t_philosopher philosopher_new(u32 index,
 
 void philosopher_set_state(t_philosopher* self, t_state new_state) {
     self->state = new_state;
-    mq_push(self->messages, new_state, self->index);
+    if (mq_push(self->messages, new_state, self->index) != NO_ERROR)
+    {
+        big_red_button_press(self->abort_button);
+        printf("Out of memory\n");
+    }
 }
 
 void* thread_routine(void* arg) {
@@ -42,7 +53,8 @@ void* thread_routine(void* arg) {
 
     while (1) {
         if (must_abort(self->abort_button)) {
-            printf("philo %u shutdown\n", self->index + 1);
+            if (VERBOSITY == 1)
+                printf("philo %u shutdown\n", self->index + 1);
             return NULL;
         }
         if (self->state == THINKING) {

@@ -12,6 +12,12 @@
 #include "t_table/t_table.h"
 #include "track/track.h"
 
+#ifdef DEBUG
+#define VERBOSITY 1
+#else
+#define VERBOSITY 0
+#endif
+
 static t_error init(t_config cfg, t_table* table);
 static t_error run(t_table* table);
 static void cleanup(t_table* table);
@@ -25,7 +31,8 @@ int main(int ac, char* av[]) {
         printf("Failed to load config, %s\n", error_repr(err));
         exit(1);
     }
-    log_config(cfg);
+    if (VERBOSITY == 1)
+        log_config(cfg);
 
     t_table table;
     err = init(cfg, &table);
@@ -79,5 +86,6 @@ static void cleanup(t_table* table) {
     for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
         pthread_join(table->philosophers[i].thread, NULL);
     }
-    printf("cleanup\n");
+    if (VERBOSITY == 1)
+        printf("cleanup\n");
 }
