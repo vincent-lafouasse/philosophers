@@ -6,18 +6,16 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:17 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 21:51:02 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/12 15:52:28 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_error/t_error.h"
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdint.h>
+#include "cool_ints.h"
 
 #define STR_U32_MAX "4294967295"
-
-typedef uint32_t	t_u32;
 
 static bool			str_is_all_numbers(const char *s);
 static bool			will_overflow_u32(const char *s);

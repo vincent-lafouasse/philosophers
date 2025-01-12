@@ -59,7 +59,7 @@ static t_error init(t_config cfg, t_table* table) {
     if (err != NO_ERROR)
         return err;
 
-    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+    for (t_u32 i = 0; i < cfg.n_philosophers; i++) {
         pthread_mutex_init(table->forks + i, NULL);
     }
 
@@ -67,7 +67,7 @@ static t_error init(t_config cfg, t_table* table) {
     if (err != NO_ERROR)
         return err;
 
-    for (u32 i = 0; i < cfg.n_philosophers; i++)
+    for (t_u32 i = 0; i < cfg.n_philosophers; i++)
         table->philosophers[i] =
             philosopher_new(i, table->forks, table->messages, &table->abort_button, cfg);
 
@@ -75,7 +75,7 @@ static t_error init(t_config cfg, t_table* table) {
 }
 
 static t_error run(t_table* table) {
-    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
         philosopher_start(table->philosophers + i);  // fallible
     }
     return NO_ERROR;
@@ -83,7 +83,7 @@ static t_error run(t_table* table) {
 
 static void cleanup(t_table* table) {
     (void)table;
-    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
         pthread_join(table->philosophers[i].thread, NULL);
     }
     if (VERBOSITY == 1)

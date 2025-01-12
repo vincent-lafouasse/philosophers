@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:50:00 by poss              #+#    #+#             */
-/*   Updated: 2025/01/12 15:50:09 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/12 15:55:08 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_duration	duration_difference(const t_instant *to, const t_instant *from)
 	return ((t_duration){.micros = delta_secs * 1000000 + delta_us});
 }
 
-u32	timestamp_ms(t_instant instant, t_instant start)
+t_u32	timestamp_ms(t_instant instant, t_instant start)
 {
 	t_duration	duration;
 
@@ -53,7 +53,7 @@ u32	timestamp_ms(t_instant instant, t_instant start)
 	return (duration.micros / 1000);
 }
 
-void	checked_sleep(u32 us)
+void	checked_sleep(t_u32 us)
 {
 	t_instant	start;
 

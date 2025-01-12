@@ -1,7 +1,6 @@
 #include "track.h"
 
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,14 +14,12 @@
 #define VERBOSITY 0
 #endif
 
-typedef uint32_t u32;
-
 typedef struct {
     t_message** last_meals;
-    u32* n_meals;
+    t_u32* n_meals;
 } t_tracker;
 
-static bool everyone_is_full(u32* n_meals, t_config cfg);
+static bool everyone_is_full(t_u32* n_meals, t_config cfg);
 
 void log_message(const t_message* message, t_instant start) {
     printf("%06u %u", timestamp_ms(message->timestamp, start),
@@ -53,7 +50,7 @@ t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
     if (must_abort(&table->abort_button))
         return DONE;
 
-    for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
+    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
         t_instant last_meal = tracker->last_meals[i]
                                   ? tracker->last_meals[i]->timestamp
                                   : table->simulation_start;
@@ -97,7 +94,7 @@ t_error track_progress(t_table* table) {
         return E_OOM;
     }
     if (table->cfg.track_meals) {
-        tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(u32));
+        tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(t_u32));
         if (tracker.n_meals == NULL) {
             return free(tracker.last_meals), E_OOM;
         }
@@ -110,8 +107,8 @@ t_error track_progress(t_table* table) {
     return NO_ERROR;
 }
 
-static bool everyone_is_full(u32* n_meals, t_config cfg) {
-    for (u32 i = 0; i < cfg.n_philosophers; i++) {
+static bool everyone_is_full(t_u32* n_meals, t_config cfg) {
+    for (t_u32 i = 0; i < cfg.n_philosophers; i++) {
         if (n_meals[i] < cfg.n_meals)
             return false;
     }

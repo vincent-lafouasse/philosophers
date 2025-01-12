@@ -12,7 +12,7 @@
 #define VERBOSITY 0
 #endif
 
-t_philosopher philosopher_new(u32 index,
+t_philosopher philosopher_new(t_u32 index,
                               pthread_mutex_t* forks,
                               t_message_queue* messages,
                               t_big_red_button* abort_button,

@@ -6,16 +6,14 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:50:11 by poss              #+#    #+#             */
-/*   Updated: 2025/01/12 15:50:44 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/12 15:52:59 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <stdint.h>
 #include <sys/time.h>
-
-typedef uint32_t			t_u32;
+#include "cool_ints.h"
 
 typedef struct s_duration	t_duration;
 struct						s_duration
