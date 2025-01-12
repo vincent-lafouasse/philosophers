@@ -1,19 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_time.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 15:50:11 by poss              #+#    #+#             */
+/*   Updated: 2025/01/12 15:50:44 by poss             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 
 #include <stdint.h>
 #include <sys/time.h>
 
-typedef uint32_t u32;
+typedef uint32_t			t_u32;
 
-typedef struct s_duration t_duration;
-struct s_duration {
-    u32 micros;
+typedef struct s_duration	t_duration;
+struct						s_duration
+{
+	t_u32					micros;
 };
 
-typedef struct timeval t_instant;
+typedef struct timeval		t_instant;
 
-t_instant instant_now(void);
-t_duration duration_since(const t_instant* instant);
-t_duration duration_difference(const t_instant* to, const t_instant* from);
-u32 timestamp_ms(t_instant instant, t_instant start);
-void checked_sleep(u32 us);
+t_instant					instant_now(void);
+t_duration					duration_since(const t_instant *instant);
+t_duration					duration_difference(const t_instant *to,
+								const t_instant *from);
+t_u32						timestamp_ms(t_instant instant, t_instant start);
+void						checked_sleep(t_u32 us);
