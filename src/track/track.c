@@ -50,6 +50,9 @@ void log_death(t_u32 philo, t_instant start, t_instant last_meal) {
 typedef enum e_simulation_status { CONTINUE, DONE } t_simulation_status;
 
 t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
+    if (must_abort(&table->abort_button))
+        return DONE;
+
     for (u32 i = 0; i < table->cfg.n_philosophers; i++) {
         t_instant last_meal = tracker->last_meals[i]
                                   ? tracker->last_meals[i]->timestamp
@@ -61,6 +64,8 @@ t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
             return DONE;
         }
     }
+    if (must_abort(&table->abort_button))
+        return DONE;
     if (table->messages->head) {
         t_message* message = mq_pop(table->messages);
         log_message(message, table->simulation_start);
