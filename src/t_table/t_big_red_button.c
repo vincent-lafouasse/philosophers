@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#ifdef VERBOSE
+#ifdef DEBUG
 #define VERBOSITY 1
 #else
 #define VERBOSITY 0

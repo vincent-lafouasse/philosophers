@@ -9,7 +9,7 @@
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 
-#ifdef VERBOSE
+#ifdef DEBUG
 #define VERBOSITY 1
 #else
 #define VERBOSITY 0

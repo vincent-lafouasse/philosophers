@@ -12,7 +12,7 @@
 #include "t_table/t_table.h"
 #include "track/track.h"
 
-#ifdef VERBOSE
+#ifdef DEBUG
 #define VERBOSITY 1
 #else
 #define VERBOSITY 0
