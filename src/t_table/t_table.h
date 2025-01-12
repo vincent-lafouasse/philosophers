@@ -13,3 +13,6 @@ typedef struct s_table {
     t_big_red_button abort_button;
     t_config cfg;
 } t_table;
+
+t_error table_init(t_config cfg, t_table* table);
+void table_cleanup(t_table* table);
