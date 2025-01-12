@@ -1,7 +1,7 @@
 #pragma once
 
 #include "t_message_queue/t_message_queue.h"
-#include "t_philosopher.h"
+#include "t_philosopher/t_philosopher.h"
 #include "t_big_red_button.h"
 #include <stdbool.h>
 

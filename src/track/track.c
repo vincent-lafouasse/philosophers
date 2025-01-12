@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ft_time.h"
-#include "t_big_red_button.h"
+#include "time/ft_time.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
 

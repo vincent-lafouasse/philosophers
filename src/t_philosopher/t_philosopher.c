@@ -2,8 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
-#include "ft_time.h"
-#include "t_big_red_button.h"
+#include "time/ft_time.h"
 #include "t_message_queue/t_message_queue.h"
 
 t_philosopher philosopher_new(u32 index,

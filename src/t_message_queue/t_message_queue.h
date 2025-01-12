@@ -6,14 +6,14 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:34:02 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 23:51:24 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/12 12:22:50 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "ft_time.h"
-#include "t_philosopher.h"
+#include "time/ft_time.h"
+#include "t_philosopher/t_philosopher.h"
 #include <pthread.h>
 #include <stdbool.h>
 

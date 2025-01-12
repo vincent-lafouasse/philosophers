@@ -5,12 +5,11 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "ft_time.h"
-#include "t_big_red_button.h"
+#include "time/ft_time.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
-#include "t_philosopher.h"
-#include "t_table.h"
+#include "t_philosopher/t_philosopher.h"
+#include "t_table/t_table.h"
 #include "track/track.h"
 
 static t_error init(t_config cfg, t_table* table);
