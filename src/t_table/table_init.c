@@ -14,8 +14,6 @@ static void	allocate_memory(t_table *table, t_config cfg)
 
 t_error	table_init(t_config cfg, t_table *table)
 {
-	t_error	err;
-
 	memset(table, 0, sizeof(*table));
 	table->cfg = cfg;
 	allocate_memory(table, cfg);
@@ -27,12 +25,10 @@ t_error	table_init(t_config cfg, t_table *table)
 		return (E_OOM);
 	}
 	table->simulation_start = instant_now();
-	err = mq_new(table->messages);
-	if (err != NO_ERROR)
-		return (err);
-	err = big_red_button_init(&table->abort_button);
-	if (err != NO_ERROR)
-		return (err);
+	if (mq_new(table->messages) != NO_ERROR)
+		return E_MUTEX_INIT;
+	if (big_red_button_init(&table->abort_button) != NO_ERROR)
+		return E_MUTEX_INIT;
 	for (t_u32 i = 0; i < cfg.n_philosophers; i++)
 	{
 		pthread_mutex_init(table->forks + i, NULL);
