@@ -47,7 +47,7 @@ void log_death(t_u32 philo, t_instant start, t_instant last_meal) {
 typedef enum e_simulation_status { CONTINUE, DONE } t_simulation_status;
 
 t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
-    if (must_abort(&table->abort_button))
+    if (must_abort(table->abort_button))
         return DONE;
 
     for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
@@ -56,12 +56,12 @@ t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
                                   : table->simulation_start;
         if (duration_since(&last_meal).micros >
             table->cfg.time_to_die_ms * 1000) {
-            big_red_button_press(&table->abort_button);
+            big_red_button_press(table->abort_button);
             log_death(i, table->simulation_start, last_meal);
             return DONE;
         }
     }
-    if (must_abort(&table->abort_button))
+    if (must_abort(table->abort_button))
         return DONE;
     if (table->messages->head) {
         t_message* message = mq_pop(table->messages);
@@ -72,7 +72,7 @@ t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
             if (table->cfg.track_meals) {
                 tracker->n_meals[message->index] += 1;
                 if (everyone_is_full(tracker->n_meals, table->cfg)) {
-                    big_red_button_press(&table->abort_button);
+                    big_red_button_press(table->abort_button);
                     printf("Everybody is full\n");
                     return DONE;
                 }
