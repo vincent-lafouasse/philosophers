@@ -10,6 +10,12 @@ static void	allocate_memory(t_table *table, t_config cfg)
 			* sizeof(*table->philosophers));
 	table->forks = malloc(cfg.n_philosophers * sizeof(*table->forks));
 	table->messages = malloc(sizeof(*table->messages));
+	if (table->philosophers)
+		memset(table->philosophers, 0, cfg.n_philosophers * sizeof(*table->philosophers));
+	if (table->forks)
+		memset(table->forks, 0, cfg.n_philosophers * sizeof(*table->forks));
+	if (table->messages)
+		memset(table->messages, 0, cfg.n_philosophers * sizeof(*table->messages));
 }
 
 t_error	table_init(t_config cfg, t_table *table)
