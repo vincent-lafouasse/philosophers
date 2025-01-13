@@ -18,7 +18,7 @@ int main(int ac, char* av[]) {
     err = load_config(ac, av, &cfg);
     if (err != NO_ERROR) {
         printf("Failed to load config, %s\n", error_repr(err));
-        exit(1);
+        return EXIT_FAILURE;
     }
 
     t_table table;
