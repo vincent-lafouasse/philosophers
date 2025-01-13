@@ -33,7 +33,7 @@ static void cleanup(t_philosopher* philos, pthread_mutex_t* forks, t_message_que
 	i = 0;
 	if (forks) {
 		while (i < cfg.n_philosophers) {
-			pthread_mutex_destroy(forks + i);
+			pthread_mutex_destroy(forks + i++);
 		}
 		free(forks);
 	}
