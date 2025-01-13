@@ -21,7 +21,7 @@ void table_cleanup(t_table* table) {
     free(table->messages);
     free(table->philosophers);
     i = 0;
-    while (i < table->cfg.n_philosophers++) {
+    while (i < table->cfg.n_philosophers) {
         pthread_mutex_destroy(table->forks + i++);
     }
     free(table->forks);
