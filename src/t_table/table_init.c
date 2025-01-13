@@ -60,6 +60,7 @@ static t_error init_forks(pthread_mutex_t* forks, t_config cfg) {
 			free(forks);
 			return E_MUTEX_INIT;
 		}
+		i++;
 	}
 	return NO_ERROR;
 }
