@@ -24,5 +24,6 @@ void table_cleanup(t_table* table) {
         pthread_mutex_destroy(table->forks + i++);
     }
     free(table->forks);
-    pthread_mutex_destroy(&table->abort_button.abort_guard);
+    pthread_mutex_destroy(&table->abort_button->abort_guard);
+    free(table->abort_button);
 }
