@@ -44,23 +44,32 @@ void log_death(t_u32 philo, t_instant start, t_instant last_meal) {
                philo + 1);
 }
 
+bool everybodys_alive(t_table* table, t_tracker* tracker) {
+    t_instant last_meal;
+
+    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
+
+        if (tracker->last_meals[i] != NULL)
+            last_meal = tracker->last_meals[i]->timestamp;
+        else
+            last_meal = table->simulation_start;
+        if (duration_since(&last_meal).micros >
+            table->cfg.time_to_die_ms * 1000) {
+            big_red_button_press(table->abort_button);
+            log_death(i, table->simulation_start, last_meal);
+            return false;
+        }
+    }
+    return true;
+}
+
 typedef enum e_simulation_status { CONTINUE, DONE } t_simulation_status;
 
 t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
     if (must_abort(table->abort_button))
         return DONE;
-
-    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
-        t_instant last_meal = tracker->last_meals[i]
-                                  ? tracker->last_meals[i]->timestamp
-                                  : table->simulation_start;
-        if (duration_since(&last_meal).micros >
-            table->cfg.time_to_die_ms * 1000) {
-            big_red_button_press(table->abort_button);
-            log_death(i, table->simulation_start, last_meal);
-            return DONE;
-        }
-    }
+    if (!everybodys_alive(table, tracker))
+        return DONE;
     if (must_abort(table->abort_button))
         return DONE;
     if (table->messages->head) {
