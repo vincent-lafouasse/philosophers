@@ -1,3 +1,4 @@
+#include "t_error/t_error.h"
 #include "t_message_queue/t_message_queue.h"
 #include "t_philosopher/t_philosopher.h"
 #include "t_table.h"
@@ -41,6 +42,24 @@ static void cleanup(t_philosopher* philos, pthread_mutex_t* forks, t_message_que
 		free(abort_button);
 	}
 }
+
+static t_error init_forks(pthread_mutex_t* forks, t_config cfg) {
+	t_u32 i = 0;
+	t_u32 j;
+
+	while (i < cfg.n_philosophers) {
+		if (pthread_mutex_init(forks + i, NULL)) {
+			j = 0;
+			while (j < i) {
+				pthread_mutex_destroy(forks + j++);
+			}
+			free(forks);
+			return E_MUTEX_INIT;
+		}
+	}
+	return NO_ERROR;
+}
+
 
 t_error	table_init(t_config cfg, t_table *table)
 {
