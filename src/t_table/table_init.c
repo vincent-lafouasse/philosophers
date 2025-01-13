@@ -66,24 +66,37 @@ t_error	table_init(t_config cfg, t_table *table)
 	memset(table, 0, sizeof(*table));
 	table->cfg = cfg;
 	allocate_memory(table, cfg);
-	if (!table->philosophers || !table->forks || !table->messages)
+	if (!table->philosophers || !table->forks || !table->messages || !table->abort_button)
 	{
 		free(table->philosophers);
 		free(table->forks);
 		free(table->messages);
+		free(table->abort_button);
 		return (E_OOM);
 	}
-	table->simulation_start = instant_now();
+	if (init_forks(table->forks, cfg) != NO_ERROR) {
+		free(table->philosophers);
+		free(table->messages);
+		free(table->abort_button);
+		return (E_MUTEX_INIT);
+	}
 	if (mq_new(table->messages) != NO_ERROR) {
+
+		cleanup(table->philosophers, table->forks, NULL, NULL, cfg);
+		free(table->messages);
+		free(table->abort_button);
 		return E_MUTEX_INIT;
 	}
-	if (big_red_button_init(table->abort_button) != NO_ERROR)
+	if (big_red_button_init(table->abort_button) != NO_ERROR) {
+		cleanup(table->philosophers, table->forks, table->messages, NULL, cfg);
+		free(table->abort_button);
 		return E_MUTEX_INIT;
+	}
 	for (t_u32 i = 0; i < cfg.n_philosophers; i++)
 	{
-		pthread_mutex_init(table->forks + i, NULL);
 		table->philosophers[i] = philosopher_new(i, table->forks,
 				table->messages, table->abort_button, cfg);
 	}
+	table->simulation_start = instant_now();
 	return (NO_ERROR);
 }
