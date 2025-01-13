@@ -37,6 +37,10 @@ static void cleanup(t_philosopher* philos, pthread_mutex_t* forks, t_message_que
 		}
 		free(forks);
 	}
+	if (mq) {
+		mq_clear(mq);
+		free(mq);
+	}
 	if (abort_button) {
 		pthread_mutex_destroy(&abort_button->abort_guard);
 		free(abort_button);
