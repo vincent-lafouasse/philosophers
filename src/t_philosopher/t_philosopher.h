@@ -23,7 +23,6 @@ struct s_philosopher {
     t_u32 index;
     pthread_mutex_t* first_fork;
     pthread_mutex_t* second_fork;
-    pthread_mutex_t* output_lock;
     t_state state;
     t_message_queue* messages;
     t_big_red_button* abort_button;
