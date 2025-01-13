@@ -19,7 +19,7 @@ static void	allocate_memory(t_table *table, t_config cfg)
 	if (table->forks)
 		memset(table->forks, 0, cfg.n_philosophers * sizeof(*table->forks));
 	if (table->messages)
-		memset(table->messages, 0, cfg.n_philosophers * sizeof(*table->messages));
+		memset(table->messages, 0, sizeof(*table->messages));
 	if (table->abort_button)
 		memset(table->abort_button, 0, sizeof(*table->abort_button));
 }
