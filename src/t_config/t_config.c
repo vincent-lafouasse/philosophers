@@ -6,13 +6,19 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/11 17:32:51 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/13 01:01:19 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_config.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef DEBUG
+#define VERBOSITY 1
+#else
+#define VERBOSITY 0
+#endif
 
 t_error			checked_atou(const char *s, t_u32 *out);
 
@@ -56,6 +62,8 @@ t_error	load_config(int ac, char *av[], t_config *cfg)
 	}
 	else
 		cfg->track_meals = false;
+	if (VERBOSITY == 1)
+		log_config(*cfg);
 	return (NO_ERROR);
 }
 
