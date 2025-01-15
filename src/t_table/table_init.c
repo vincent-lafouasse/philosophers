@@ -7,29 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void	allocate_memory(t_table *table, t_config cfg)
-{
-	table->philosophers = malloc(cfg.n_philosophers
-			* sizeof(*table->philosophers));
-	table->forks = malloc(cfg.n_philosophers * sizeof(*table->forks));
-	table->messages = malloc(sizeof(*table->messages));
-	table->abort_button = malloc(sizeof(*table->abort_button));
-	if (table->philosophers)
-		memset(table->philosophers, 0, cfg.n_philosophers * sizeof(*table->philosophers));
-	if (table->forks)
-		memset(table->forks, 0, cfg.n_philosophers * sizeof(*table->forks));
-	if (table->messages)
-		memset(table->messages, 0, sizeof(*table->messages));
-	if (table->abort_button)
-		memset(table->abort_button, 0, sizeof(*table->abort_button));
-}
-
-static void cleanup(t_philosopher* philos, pthread_mutex_t* forks, t_message_queue* mq, t_big_red_button* abort_button, t_config cfg) {
+static void cleanup(pthread_mutex_t* forks, t_big_red_button* abort_button, t_message_queue* mq, t_config cfg) {
 	t_u32 i;
 
-	if (philos) {
-		free(philos);
-	}
 	i = 0;
 	if (forks) {
 		while (i < cfg.n_philosophers) {
@@ -47,17 +27,21 @@ static void cleanup(t_philosopher* philos, pthread_mutex_t* forks, t_message_que
 	}
 }
 
-static t_error init_forks(pthread_mutex_t* forks, t_config cfg) {
+static t_error init_forks(pthread_mutex_t** forks, t_config cfg) {
 	t_u32 i = 0;
 	t_u32 j;
 
+	*forks = malloc(cfg.n_philosophers * sizeof(**forks));
+	if (*forks == NULL)
+		return E_OOM;
+	memset(*forks, 0, cfg.n_philosophers * sizeof(**forks));
 	while (i < cfg.n_philosophers) {
-		if (pthread_mutex_init(forks + i, NULL)) {
+		if (pthread_mutex_init(*forks + i, NULL)) {
 			j = 0;
 			while (j < i) {
-				pthread_mutex_destroy(forks + j++);
+				pthread_mutex_destroy(*forks + j++);
 			}
-			free(forks);
+			free(*forks);
 			return E_MUTEX_INIT;
 		}
 		i++;
@@ -65,42 +49,68 @@ static t_error init_forks(pthread_mutex_t* forks, t_config cfg) {
 	return NO_ERROR;
 }
 
+static t_error init_abort_button(t_big_red_button** button) {
+	t_error err;
+
+	*button = malloc(sizeof(**button));
+	if (*button == NULL)
+		return E_OOM;
+	err = big_red_button_init(*button);
+	if (err != NO_ERROR) {
+		free(*button);
+		return err;
+	}
+	return NO_ERROR;
+}
+
+static t_error init_mq( t_message_queue** mq) {
+	t_error err;
+
+	*mq = malloc(sizeof(**mq));
+	if (*mq == NULL) {
+		return E_OOM;
+	}
+	err = mq_new(*mq);
+	if (err != NO_ERROR) {
+		free(*mq);
+		return err;
+	}
+	return NO_ERROR;
+}
+
+static t_error init_philos(t_philosopher** philos, pthread_mutex_t* forks, t_message_queue* mq, t_big_red_button* button, t_config cfg) {
+    *philos = malloc(cfg.n_philosophers * sizeof(**philos));
+	if (*philos == NULL)
+		return E_OOM;
+
+    for (t_u32 i = 0; i < cfg.n_philosophers; i++) {
+        (*philos)[i] = philosopher_new(i, forks, mq, button, cfg);
+	}
+	return NO_ERROR;
+}
 
 t_error	table_init(t_config cfg, t_table *table)
 {
-	memset(table, 0, sizeof(*table));
-	table->cfg = cfg;
-	allocate_memory(table, cfg);
-	if (!table->philosophers || !table->forks || !table->messages || !table->abort_button)
-	{
-		free(table->philosophers);
-		free(table->forks);
-		free(table->messages);
-		free(table->abort_button);
-		return (E_OOM);
-	}
-	if (init_forks(table->forks, cfg) != NO_ERROR) {
-		free(table->philosophers);
-		free(table->messages);
-		free(table->abort_button);
-		return (E_MUTEX_INIT);
-	}
-	if (mq_new(table->messages) != NO_ERROR) {
+	t_error err;
 
-		cleanup(table->philosophers, table->forks, NULL, NULL, cfg);
-		free(table->messages);
-		free(table->abort_button);
-		return E_MUTEX_INIT;
+	table->cfg = cfg;
+	err = init_forks(&table->forks, cfg);
+	if (err != NO_ERROR)
+		return err;
+	err = init_abort_button(&table->abort_button);
+	if (err != NO_ERROR) {
+		cleanup(table->forks, NULL, NULL, cfg);
+		return err;
 	}
-	if (big_red_button_init(table->abort_button) != NO_ERROR) {
-		cleanup(table->philosophers, table->forks, table->messages, NULL, cfg);
-		free(table->abort_button);
-		return E_MUTEX_INIT;
+	err = init_mq(&table->messages);
+	if (err != NO_ERROR) {
+		cleanup(table->forks, table->abort_button, NULL, cfg);
+		return err;
 	}
-	for (t_u32 i = 0; i < cfg.n_philosophers; i++)
-	{
-		table->philosophers[i] = philosopher_new(i, table->forks,
-				table->messages, table->abort_button, cfg);
+	err = init_philos(&table->philosophers, table->forks, table->messages, table->abort_button, cfg);
+	if (err != NO_ERROR) {
+		cleanup(table->forks, table->abort_button, table->messages, cfg);
+		return err;
 	}
 	table->simulation_start = instant_now();
 	return (NO_ERROR);
