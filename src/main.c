@@ -23,6 +23,10 @@ int main(int ac, char* av[]) {
 
     t_table table;
     err = table_init(cfg, &table);
+    if (err != NO_ERROR) {
+        printf("Failed to init state, %s\n", error_repr(err));
+        return EXIT_FAILURE;
+    }
     run(&table);
     track_progress(&table);
     table_cleanup(&table);
