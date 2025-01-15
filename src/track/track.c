@@ -102,6 +102,7 @@ t_error track_progress(t_table* table) {
     if (tracker.last_meals == NULL) {
         return E_OOM;
     }
+    memset(&tracker.last_meals, 0, table->cfg.n_philosophers * sizeof(t_message*));
     if (table->cfg.track_meals) {
         tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(t_u32));
         if (tracker.n_meals == NULL) {
