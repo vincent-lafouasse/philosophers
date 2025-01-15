@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:34:28 by poss              #+#    #+#             */
-/*   Updated: 2025/01/15 23:27:10 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/15 23:39:06 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ bool mq_isempty(t_message_queue* mq) {
 	bool out;
 
 	pthread_mutex_lock(&mq->guard);
-	out = (mq->head != NULL);
+	out = (mq->head == NULL);
 	pthread_mutex_unlock(&mq->guard);
 	return out;
 }
