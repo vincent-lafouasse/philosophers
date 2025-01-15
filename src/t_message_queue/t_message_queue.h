@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:34:02 by poss              #+#    #+#             */
-/*   Updated: 2025/01/12 22:38:20 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/15 23:26:56 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,4 @@ t_error							mq_push(t_message_queue *mq, t_state state,
 									t_u32 index);
 t_message						*mq_pop(t_message_queue *mq);
 void mq_clear(t_message_queue* mq);
+bool mq_isempty(t_message_queue* mq);

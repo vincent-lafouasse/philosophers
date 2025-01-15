@@ -72,7 +72,7 @@ t_simulation_status track_progress_inner(t_table* table, t_tracker* tracker) {
         return DONE;
     if (must_abort(table->abort_button))
         return DONE;
-    if (table->messages->head) {
+    if (!mq_isempty(table->messages)) {
         t_message* message = mq_pop(table->messages);
         log_message(message, table->simulation_start);
         if (message->state == EATING) {
