@@ -55,6 +55,13 @@ void* thread_routine(void* arg) {
         if (must_abort(self->abort_button)) {
             if (VERBOSITY == 1)
                 printf("philo %u shutdown\n", self->index + 1);
+            if (self->state == FORK_HANDED1) {
+                pthread_mutex_unlock(self->first_fork);
+            }
+            if (self->state == FORK_HANDED2 || self->state == EATING) {
+                pthread_mutex_unlock(self->first_fork);
+                pthread_mutex_unlock(self->second_fork);
+            }
             return NULL;
         }
         if (self->state == THINKING) {
@@ -65,11 +72,13 @@ void* thread_routine(void* arg) {
             if (delay_ms > 0)
                 checked_sleep(delay_ms * 1000);
             pthread_mutex_lock(self->first_fork);
-            philosopher_set_state(self, FORK_HANDED);
+            philosopher_set_state(self, FORK_HANDED1);
             continue;
-        } else if (self->state == FORK_HANDED) {
+        } else if (self->state == FORK_HANDED1) {
             pthread_mutex_lock(self->second_fork);
-            mq_push(self->messages, FORK_HANDED, self->index);
+            philosopher_set_state(self, FORK_HANDED2);
+            continue;
+        } else if (self->state == FORK_HANDED2) {
             philosopher_set_state(self, EATING);
             continue;
         } else if (self->state == EATING) {

@@ -11,7 +11,8 @@ typedef struct s_message_queue t_message_queue;
 typedef enum e_state t_state;
 enum e_state {
     THINKING,
-    FORK_HANDED,
+    FORK_HANDED1,
+    FORK_HANDED2,
     EATING,
     SLEEPING,
     DEAD,

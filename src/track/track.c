@@ -26,7 +26,7 @@ void log_message(const t_message* message, t_instant start) {
            message->index + 1);
     if (message->state == THINKING)
         printf(" is thinking\n");
-    if (message->state == FORK_HANDED)
+    if (message->state == FORK_HANDED1 || message->state == FORK_HANDED2)
         printf(" has taken a fork\n");
     if (message->state == EATING)
         printf(" is eating\n");
