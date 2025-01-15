@@ -4,8 +4,11 @@ SRCS = $(shell find src -name '*.c')
 
 CC ?= cc
 CFLAGS += -Wall -Wextra -g3
+CFLAGS += -pthread
 # CFLAGS += -Werror
 CPPFLAGS += -Isrc -MMD -MP
+
+LDFLAGS += -lpthread
 
 OBJS := $(SRCS:%=build/%.o)
 DEPS := $(OBJS:.o=.d)
