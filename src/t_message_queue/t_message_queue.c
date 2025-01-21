@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:34:28 by poss              #+#    #+#             */
-/*   Updated: 2025/01/15 23:39:06 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/21 20:59:41 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,13 @@ t_message	*mq_pop(t_message_queue *mq)
 }
 
 void mq_clear(t_message_queue* mq) {
-	while (mq->head)
-		free(mq_pop(mq));
+	t_message* message;
+
+	message = mq_pop(mq);
+	while (message) {
+		free(message);
+		message = mq_pop(mq);
+	}
 }
 
 bool mq_isempty(t_message_queue* mq) {
