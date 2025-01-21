@@ -48,6 +48,16 @@ void philosopher_set_state(t_philosopher* self, t_state new_state) {
     }
 }
 
+void* lone_philosopher(void* arg) {
+    t_philosopher* self = (t_philosopher*)arg;
+
+    pthread_mutex_lock(self->first_fork);
+    philosopher_set_state(self, FORK_HANDED1);
+    checked_sleep(1100 * self->cfg.time_to_die_ms);
+    pthread_mutex_unlock(self->first_fork);
+    return NULL;
+}
+
 void* thread_routine(void* arg) {
     t_philosopher* self = (t_philosopher*)arg;
 
@@ -99,7 +109,12 @@ void* thread_routine(void* arg) {
 }
 
 t_error philosopher_start(t_philosopher* self) {
-    int status = pthread_create(&self->thread, NULL, thread_routine, self);
+    int status;
+
+    if (self->cfg.n_philosophers != 1)
+        status = pthread_create(&self->thread, NULL, thread_routine, self);
+    else
+        status = pthread_create(&self->thread, NULL, lone_philosopher, self);
 
     if (status == 0)
         return E_PTHREAD_CREATE;
