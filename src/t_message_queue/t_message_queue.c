@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 22:34:28 by poss              #+#    #+#             */
-/*   Updated: 2025/01/21 21:01:58 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 00:26:53 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ void mq_clear(t_message_queue* mq) {
 
 	message = mq_pop(mq);
 	while (message) {
-		printf("freeing message\n");
 		free(message);
 		message = mq_pop(mq);
 	}
