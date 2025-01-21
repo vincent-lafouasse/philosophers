@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/13 01:01:19 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/21 20:40:18 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ static t_error	load_timers(char *av[], t_config *cfg)
 	err = checked_atou(av[1], &cfg->n_philosophers);
 	if (err != NO_ERROR)
 		return (err);
-	if (cfg->n_philosophers == 1)
-	{
-		printf("todo\n");
-		exit(1);
-	}
 	err = checked_atou(av[2], &cfg->time_to_die_ms);
 	if (err != NO_ERROR)
 		return (err);
