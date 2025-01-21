@@ -112,6 +112,9 @@ t_error track_progress(t_table* table) {
                table->cfg.n_philosophers * sizeof(*tracker.n_meals));
     }
     while (track_progress_inner(table, &tracker) == CONTINUE);
+    for (t_u32 i = 0; i < table->cfg.n_philosophers; i++) {
+        free(tracker.last_meals[i]);
+    }
     free(tracker.last_meals);
     free(tracker.n_meals);
     return NO_ERROR;
