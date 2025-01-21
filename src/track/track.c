@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "t_table/t_big_red_button.h"
 #include "time/ft_time.h"
 #include "t_config/t_config.h"
 #include "t_message_queue/t_message_queue.h"
@@ -100,13 +101,16 @@ t_error track_progress(t_table* table) {
         .last_meals = malloc(table->cfg.n_philosophers * sizeof(t_message*)),
         .n_meals = NULL};
     if (tracker.last_meals == NULL) {
+        big_red_button_press(table->abort_button);
         return E_OOM;
     }
     memset(tracker.last_meals, 0, table->cfg.n_philosophers * sizeof(t_message*));
     if (table->cfg.track_meals) {
         tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(t_u32));
         if (tracker.n_meals == NULL) {
-            return free(tracker.last_meals), E_OOM;
+            free(tracker.last_meals);
+            big_red_button_press(table->abort_button);
+            return E_OOM;
         }
         memset(tracker.n_meals, 0,
                table->cfg.n_philosophers * sizeof(*tracker.n_meals));
