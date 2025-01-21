@@ -11,11 +11,9 @@
 
 void table_cleanup(t_table* table) {
     t_u32 i = 0;
-    if (table->cfg.n_philosophers != 1) {
-        while (i < table->cfg.n_philosophers) {
-            pthread_join(table->philosophers[i].thread, NULL);
-            i++;
-        }
+    while (i < table->cfg.n_philosophers) {
+        pthread_join(table->philosophers[i].thread, NULL);
+        i++;
     }
     if (VERBOSITY == 1)
         printf("cleanup\n");
