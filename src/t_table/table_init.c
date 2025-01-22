@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 18:53:38 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 18:53:39 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 18:57:28 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,16 @@ static t_error	init_mq(t_message_queue **mq)
 	return (NO_ERROR);
 }
 
-static t_error	init_philos(t_philosopher **philos, pthread_mutex_t *forks,
-		t_message_queue *mq, t_big_red_button *button, t_config cfg)
+static t_error	init_philos(t_table *table)
 {
-	*philos = malloc(cfg.n_philosophers * sizeof(**philos));
-	if (*philos == NULL)
+	table->philosophers = malloc(table->cfg.n_philosophers
+			* sizeof(*table->philosophers));
+	if (table->philosophers == NULL)
 		return (E_OOM);
-	for (t_u32 i = 0; i < cfg.n_philosophers; i++)
+	for (t_u32 i = 0; i < table->cfg.n_philosophers; i++)
 	{
-		(*philos)[i] = philosopher_new(i, forks, mq, button, cfg);
+		table->philosophers[i] = philosopher_new(i, table->forks,
+				table->messages, table->abort_button, table->cfg);
 	}
 	return (NO_ERROR);
 }
@@ -139,8 +140,7 @@ t_error	table_init(t_config cfg, t_table *table)
 		cleanup(table->forks, table->abort_button, NULL, cfg);
 		return (err);
 	}
-	err = init_philos(&table->philosophers, table->forks, table->messages,
-			table->abort_button, cfg);
+	err = init_philos(table);
 	if (err != NO_ERROR)
 	{
 		cleanup(table->forks, table->abort_button, table->messages, cfg);
