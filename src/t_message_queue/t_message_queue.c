@@ -67,21 +67,24 @@ t_message	*mq_pop(t_message_queue *mq)
 	return (out);
 }
 
-void mq_clear(t_message_queue* mq) {
-	t_message* message;
+void	mq_clear(t_message_queue *mq)
+{
+	t_message	*message;
 
 	message = mq_pop(mq);
-	while (message) {
+	while (message)
+	{
 		free(message);
 		message = mq_pop(mq);
 	}
 }
 
-bool mq_isempty(t_message_queue* mq) {
-	bool out;
+bool	mq_isempty(t_message_queue *mq)
+{
+	bool	out;
 
 	pthread_mutex_lock(&mq->guard);
 	out = (mq->head == NULL);
 	pthread_mutex_unlock(&mq->guard);
-	return out;
+	return (out);
 }
