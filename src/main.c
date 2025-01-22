@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/22 19:19:40 by poss              #+#    #+#             */
+/*   Updated: 2025/01/22 19:20:44 by poss             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "t_config/t_config.h"
 #include "t_philosopher/t_philosopher.h"
 #include "t_table/t_table.h"
@@ -35,9 +47,13 @@ int	main(int ac, char *av[])
 
 static t_error	run(t_table *table)
 {
-	for (t_u32 i = 0; i < table->cfg.n_philosophers; i++)
+	t_u32	i;
+
+	i = 0;
+	while (i < table->cfg.n_philosophers)
 	{
-		philosopher_start(table->philosophers + i); // fallible
+		philosopher_start(table->philosophers + i);
+		i++;
 	}
 	return (NO_ERROR);
 }
