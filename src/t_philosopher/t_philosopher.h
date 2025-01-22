@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:02:46 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:06:28 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:09:36 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ struct							s_philosopher
 
 typedef struct s_table			t_table;
 
-t_philosopher					philosopher_new(t_u32 index, t_table *table);
-t_error							philosopher_start(t_philosopher *self);
+t_philosopher	philosopher_new(t_u32 index, t_table *table);
+t_error			philosopher_start(t_philosopher *self);
+void			philosopher_set_state(t_philosopher *self, t_state new_state);
 
 #endif
