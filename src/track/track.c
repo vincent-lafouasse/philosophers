@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:22:18 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:26:01 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:33:23 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,15 +89,46 @@ typedef enum e_simulation_status
 	DONE
 }					t_simulation_status;
 
+static bool	must_stop(t_table *table, t_tracker *tracker)
+{
+	if (must_abort(table->abort_button))
+	{
+		return (true);
+	}
+	if (!everybodys_alive(table, tracker))
+	{
+		return (true);
+	}
+	if (must_abort(table->abort_button))
+	{
+		return (true);
+	}
+	return (false);
+}
+
+t_simulation_status	process_meal(t_message *message, t_tracker *tracker,
+		t_table *table)
+{
+	free(tracker->last_meals[message->index]);
+	tracker->last_meals[message->index] = message;
+	if (table->cfg.track_meals)
+	{
+		tracker->n_meals[message->index] += 1;
+		if (everyone_is_full(tracker->n_meals, table->cfg))
+		{
+			big_red_button_press(table->abort_button);
+			printf("Everybody is full\n");
+			return (DONE);
+		}
+	}
+	return (CONTINUE);
+}
+
 t_simulation_status	track_progress_inner(t_table *table, t_tracker *tracker)
 {
 	t_message	*message;
 
-	if (must_abort(table->abort_button))
-		return (DONE);
-	if (!everybodys_alive(table, tracker))
-		return (DONE);
-	if (must_abort(table->abort_button))
+	if (must_stop(table, tracker))
 		return (DONE);
 	if (!mq_isempty(table->messages))
 	{
@@ -105,23 +136,11 @@ t_simulation_status	track_progress_inner(t_table *table, t_tracker *tracker)
 		log_message(message, table->simulation_start);
 		if (message->state == EATING)
 		{
-			free(tracker->last_meals[message->index]);
-			tracker->last_meals[message->index] = message;
-			if (table->cfg.track_meals)
-			{
-				tracker->n_meals[message->index] += 1;
-				if (everyone_is_full(tracker->n_meals, table->cfg))
-				{
-					big_red_button_press(table->abort_button);
-					printf("Everybody is full\n");
-					return (DONE);
-				}
-			}
+			if (process_meal(message, tracker, table) == DONE)
+				return (DONE);
 		}
 		else
-		{
 			free(message);
-		}
 	}
 	return (CONTINUE);
 }
