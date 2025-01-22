@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:00:04 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:01:28 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:21:28 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ t_error	init_philos(t_table *table)
 	i = 0;
 	while (i < table->cfg.n_philosophers)
 	{
-		table->philosophers[i] = philosopher_new(i, table->forks,
-				table->messages, table->abort_button, table->cfg);
+		table->philosophers[i] = philosopher_new(i, table);
 		i++;
 	}
 	return (NO_ERROR);
