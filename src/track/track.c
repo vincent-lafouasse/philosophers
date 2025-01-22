@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:22:18 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:33:23 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:36:27 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,31 +159,40 @@ static void	cleanup_tracker(t_tracker *t, const t_table *table)
 	free(t->n_meals);
 }
 
-t_error	track_progress(t_table *table)
+t_error	init_tracker(t_tracker *tracker, t_table *table)
 {
-	t_tracker	tracker;
-
-	tracker = (t_tracker){.last_meals = malloc(table->cfg.n_philosophers
-			* sizeof(t_message *)), .n_meals = NULL};
-	if (tracker.last_meals == NULL)
+	tracker->last_meals = malloc(table->cfg.n_philosophers
+			* sizeof(t_message *));
+	if (tracker->last_meals == NULL)
 	{
 		big_red_button_press(table->abort_button);
 		return (E_OOM);
 	}
-	memset(tracker.last_meals, 0, table->cfg.n_philosophers
+	memset(tracker->last_meals, 0, table->cfg.n_philosophers
 		* sizeof(t_message *));
 	if (table->cfg.track_meals)
 	{
-		tracker.n_meals = malloc(table->cfg.n_philosophers * sizeof(t_u32));
-		if (tracker.n_meals == NULL)
+		tracker->n_meals = malloc(table->cfg.n_philosophers * sizeof(t_u32));
+		if (tracker->n_meals == NULL)
 		{
-			free(tracker.last_meals);
+			free(tracker->last_meals);
 			big_red_button_press(table->abort_button);
 			return (E_OOM);
 		}
-		memset(tracker.n_meals, 0, table->cfg.n_philosophers
-			* sizeof(*tracker.n_meals));
+		memset(tracker->n_meals, 0, table->cfg.n_philosophers
+			* sizeof(*tracker->n_meals));
 	}
+	return (NO_ERROR);
+}
+
+t_error	track_progress(t_table *table)
+{
+	t_tracker	tracker;
+	t_error		err;
+
+	err = init_tracker(&tracker, table);
+	if (err != NO_ERROR)
+		return (err);
 	while (track_progress_inner(table, &tracker) == CONTINUE)
 		;
 	cleanup_tracker(&tracker, table);
