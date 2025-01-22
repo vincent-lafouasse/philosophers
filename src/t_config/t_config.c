@@ -6,18 +6,17 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/21 20:40:18 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 18:50:58 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_config.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 #ifdef DEBUG
-#define VERBOSITY 1
+# define VERBOSITY 1
 #else
-#define VERBOSITY 0
+# define VERBOSITY 0
 #endif
 
 t_error			checked_atou(const char *s, t_u32 *out);
