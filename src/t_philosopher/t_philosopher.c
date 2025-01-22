@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:02:40 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:06:00 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:07:48 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_philosopher	philosopher_new(t_u32 index, t_table *table)
 		first_fork = table->forks + (index + 1) % table->cfg.n_philosophers;
 		second_fork = table->forks + index;
 	}
-	return (t_philosopher){
+	return ((t_philosopher){
 		.index = index,
 		.cfg = table->cfg,
 		.first_fork = first_fork,
@@ -47,7 +47,7 @@ t_philosopher	philosopher_new(t_u32 index, t_table *table)
 		.state = THINKING,
 		.messages = table->messages,
 		.abort_button = table->abort_button,
-	};
+	});
 }
 
 void	philosopher_set_state(t_philosopher *self, t_state new_state)

@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:02:46 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:05:06 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/22 19:06:28 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "t_table/t_big_red_button.h"
 # include <pthread.h>
 
-struct s_message_queue;
+struct							s_message_queue;
 typedef struct s_message_queue	t_message_queue;
 
 typedef enum e_state			t_state;
