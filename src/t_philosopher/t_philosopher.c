@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:02:40 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:09:56 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 15:11:11 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
-
-#ifdef DEBUG
-# define VERBOSITY 1
-#else
-# define VERBOSITY 0
-#endif
 
 void	*thread_routine(void *arg);
 
