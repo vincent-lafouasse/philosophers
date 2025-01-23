@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:38:06 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:39:37 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:02:56 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ void	cleanup_tracker(t_tracker *t, const t_table *table)
 		i++;
 	}
 	free(t->last_meals);
-	free(t->n_meals);
+	if (table->cfg.track_meals)
+		free(t->n_meals);
 }
