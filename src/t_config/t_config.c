@@ -6,12 +6,13 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 18:50:58 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:12:24 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "t_config.h"
 #include <stdio.h>
+#include "t_error/t_error.h"
 
 #ifdef DEBUG
 # define VERBOSITY 1
@@ -38,6 +39,16 @@ static t_error	load_timers(char *av[], t_config *cfg)
 	return (err);
 }
 
+static t_error validate_config(t_config cfg) {
+	 if (cfg.time_to_sleep_ms < 60){
+		return E_INSUFFICIENT_TIME;}
+	 if (cfg.time_to_die_ms < 60){
+		return E_INSUFFICIENT_TIME;}
+	 if (cfg.time_to_eat_ms < 60){
+		return E_INSUFFICIENT_TIME;}
+	return NO_ERROR;
+}
+
 t_error	load_config(int ac, char *av[], t_config *cfg)
 {
 	t_error	err;
@@ -58,7 +69,7 @@ t_error	load_config(int ac, char *av[], t_config *cfg)
 		cfg->track_meals = false;
 	if (VERBOSITY == 1)
 		log_config(*cfg);
-	return (NO_ERROR);
+	return validate_config(*cfg);
 }
 
 void	log_config(t_config cfg)

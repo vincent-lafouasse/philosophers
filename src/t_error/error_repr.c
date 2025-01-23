@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:45:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 22:25:35 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:10:33 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #define E_OVERFLOW_REPR "Integer overflow"
 #define E_BADUSAGE_REPR "Bad usage"
 #define E_MUTEX_INIT_REPR "Failed to init mutex"
+#define E_INSUFFICIENT_TIME_REPR "Timer should not go below 60 ms"
 
 const char	*error_repr(t_error err)
 {
@@ -39,5 +40,7 @@ const char	*error_repr(t_error err)
 		return (E_BADUSAGE_REPR);
 	if (err == E_MUTEX_INIT)
 		return (E_MUTEX_INIT_REPR);
+	if (err == E_INSUFFICIENT_TIME)
+		return (E_INSUFFICIENT_TIME_REPR);
 	return ("Unreachable");
 }

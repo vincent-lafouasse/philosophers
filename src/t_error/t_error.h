@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:45:26 by poss              #+#    #+#             */
-/*   Updated: 2025/01/09 22:25:04 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:09:48 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef enum e_error
 	E_NOT_A_NUMBER,
 	E_OVERFLOW,
 	E_BADUSAGE,
+	E_INSUFFICIENT_TIME,
 }			t_error;
 
 const char	*error_repr(t_error err);
