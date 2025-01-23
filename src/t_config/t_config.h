@@ -6,15 +6,16 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:33 by poss              #+#    #+#             */
-/*   Updated: 2025/01/12 15:52:43 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:21:13 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef T_CONFIG_H
+# define T_CONFIG_H
 
-#include "t_error/t_error.h"
-#include "cool_ints.h"
-#include <stdbool.h>
+# include "cool_ints.h"
+# include "t_error/t_error.h"
+# include <stdbool.h>
 
 typedef struct s_config	t_config;
 struct					s_config
@@ -29,3 +30,5 @@ struct					s_config
 
 t_error					load_config(int ac, char *av[], t_config *cfg);
 void					log_config(t_config cfg);
+
+#endif

@@ -6,13 +6,16 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 15:51:28 by poss              #+#    #+#             */
-/*   Updated: 2025/01/12 15:51:57 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:20:42 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef COOL_INTS_H
+# define COOL_INTS_H
 
-#include <stdint.h>
+# include <stdint.h>
 
 typedef uint32_t	t_u32;
 typedef int32_t		t_i32;
+
+#endif

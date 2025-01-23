@@ -6,11 +6,12 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:45:26 by poss              #+#    #+#             */
-/*   Updated: 2025/01/23 14:09:48 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/23 14:21:32 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef T_ERROR_H
+# define T_ERROR_H
 
 typedef enum e_error
 {
@@ -26,3 +27,5 @@ typedef enum e_error
 }			t_error;
 
 const char	*error_repr(t_error err);
+
+#endif
