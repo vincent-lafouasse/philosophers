@@ -7,7 +7,10 @@ CFLAGS += -Wall -Wextra -g3
 CFLAGS += -Werror
 CFLAGS += -pthread
 CPPFLAGS += -Isrc -MMD -MP
-# CPPFLAGS += -D DEBUG
+
+ifneq ($(DEBUG),)
+CPPFLAGS += -D DEBUG
+endif
 
 LDFLAGS += -lpthread
 
