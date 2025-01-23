@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "t_config.h"
-#include <stdio.h>
 #include "t_error/t_error.h"
+#include <stdio.h>
 
 #ifdef DEBUG
 # define VERBOSITY 1
@@ -39,14 +39,21 @@ static t_error	load_timers(char *av[], t_config *cfg)
 	return (err);
 }
 
-static t_error validate_config(t_config cfg) {
-	 if (cfg.time_to_sleep_ms < 60){
-		return E_INSUFFICIENT_TIME;}
-	 if (cfg.time_to_die_ms < 60){
-		return E_INSUFFICIENT_TIME;}
-	 if (cfg.time_to_eat_ms < 60){
-		return E_INSUFFICIENT_TIME;}
-	return NO_ERROR;
+static t_error	validate_config(t_config cfg)
+{
+	if (cfg.time_to_sleep_ms < 60)
+	{
+		return (E_INSUFFICIENT_TIME);
+	}
+	if (cfg.time_to_die_ms < 60)
+	{
+		return (E_INSUFFICIENT_TIME);
+	}
+	if (cfg.time_to_eat_ms < 60)
+	{
+		return (E_INSUFFICIENT_TIME);
+	}
+	return (NO_ERROR);
 }
 
 t_error	load_config(int ac, char *av[], t_config *cfg)
@@ -69,7 +76,7 @@ t_error	load_config(int ac, char *av[], t_config *cfg)
 		cfg->track_meals = false;
 	if (VERBOSITY == 1)
 		log_config(*cfg);
-	return validate_config(*cfg);
+	return (validate_config(*cfg));
 }
 
 void	log_config(t_config cfg)
