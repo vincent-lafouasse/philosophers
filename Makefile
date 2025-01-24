@@ -1,6 +1,12 @@
 NAME = philo
 
-SRCS = $(shell find src -name '*.c')
+SRCS  = src/main.c
+SRCS += src/track/track.c src/track/log.c src/track/check.c src/track/t_tracker.c
+SRCS += src/t_philosopher/t_philosopher.c src/t_philosopher/unwind.c src/t_philosopher/philosopher_routine.c
+SRCS += src/time/ft_time.c
+SRCS += src/t_table/t_big_red_button.c src/t_table/table_init.c src/t_table/init_table_fields.c src/t_table/table_cleanup.c
+SRCS += src/t_config/t_config.c src/t_config/checked_atou.c src/t_error/error_repr.c
+SRCS += src/t_message_queue/t_message_queue.c
 
 CC ?= cc
 CFLAGS += -Wall -Wextra -g3
