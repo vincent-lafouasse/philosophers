@@ -1,12 +1,14 @@
 NAME = philo
 
-SRCS  = src/main.c
-SRCS += src/track/track.c src/track/log.c src/track/check.c src/track/t_tracker.c
-SRCS += src/t_philosopher/t_philosopher.c src/t_philosopher/unwind.c src/t_philosopher/philosopher_routine.c
-SRCS += src/time/ft_time.c
-SRCS += src/t_table/t_big_red_button.c src/t_table/table_init.c src/t_table/init_table_fields.c src/t_table/table_cleanup.c
-SRCS += src/t_config/t_config.c src/t_config/checked_atou.c src/t_error/error_repr.c
-SRCS += src/t_message_queue/t_message_queue.c
+SRCS  = main.c
+SRCS += track/track.c track/log.c track/check.c track/t_tracker.c
+SRCS += t_philosopher/t_philosopher.c t_philosopher/unwind.c t_philosopher/philosopher_routine.c
+SRCS += time/ft_time.c
+SRCS += t_table/t_big_red_button.c t_table/table_init.c t_table/init_table_fields.c t_table/table_cleanup.c
+SRCS += t_config/t_config.c t_config/checked_atou.c t_error/error_repr.c
+SRCS += t_message_queue/t_message_queue.c
+
+SRCS := $(SRCS:%=src/%)
 
 CC = cc
 CFLAGS  = -Wall -Wextra -g3
