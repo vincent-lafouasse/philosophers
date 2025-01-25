@@ -8,17 +8,18 @@ SRCS += src/t_table/t_big_red_button.c src/t_table/table_init.c src/t_table/init
 SRCS += src/t_config/t_config.c src/t_config/checked_atou.c src/t_error/error_repr.c
 SRCS += src/t_message_queue/t_message_queue.c
 
-CC ?= cc
-CFLAGS += -Wall -Wextra -g3
+CC = cc
+CFLAGS  = -Wall -Wextra -g3
 CFLAGS += -Werror
 CFLAGS += -pthread
-CPPFLAGS += -Isrc -MMD -MP
+CPPFLAGS = -Isrc -MMD -MP
 
 ifneq ($(DEBUG),)
 CPPFLAGS += -D DEBUG
 endif
 
-LDFLAGS += -lpthread
+LDFLAGS =
+LDLIBS = -lpthread
 
 OBJS := $(SRCS:%=build/%.o)
 DEPS := $(OBJS:.o=.d)
@@ -33,11 +34,9 @@ build: $(NAME)
 run: build
 	./$(NAME)
 
-# linking stage
 $(NAME): $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $@
 
-# compiling stage
 build/%.c.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
