@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:22:18 by poss              #+#    #+#             */
-/*   Updated: 2025/01/23 15:10:04 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/29 14:15:12 by vlafouas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_error	track_progress(t_table *table)
 	t_tracker	tracker;
 	t_error		err;
 
-	if (table->cfg.n_meals == 0)
+	if (table->cfg.track_meals && table->cfg.n_meals == 0)
 	{
 		big_red_button_press(table->abort_button);
 		printf("Everybody is full\n");
