@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:45:26 by poss              #+#    #+#             */
-/*   Updated: 2025/01/23 14:21:32 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/30 14:45:42 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef enum e_error
 	E_OVERFLOW,
 	E_BADUSAGE,
 	E_INSUFFICIENT_TIME,
+	E_TOO_MANY_THREADS,
 }			t_error;
 
 const char	*error_repr(t_error err);

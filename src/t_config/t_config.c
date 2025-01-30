@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 21:36:24 by poss              #+#    #+#             */
-/*   Updated: 2025/01/23 14:12:24 by poss             ###   ########.fr       */
+/*   Updated: 2025/01/30 14:47:10 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #else
 # define VERBOSITY 0
 #endif
+
+#define MAX_PHILOS 20000
 
 t_error			checked_atou(const char *s, t_u32 *out);
 
@@ -41,17 +43,21 @@ static t_error	load_timers(char *av[], t_config *cfg)
 
 static t_error	validate_config(t_config cfg)
 {
-	if (cfg.time_to_sleep_ms < 60)
+	if (cfg.time_to_sleep_ms < 30)
 	{
 		return (E_INSUFFICIENT_TIME);
 	}
-	if (cfg.time_to_die_ms < 60)
+	if (cfg.time_to_die_ms < 30)
 	{
 		return (E_INSUFFICIENT_TIME);
 	}
-	if (cfg.time_to_eat_ms < 60)
+	if (cfg.time_to_eat_ms < 30)
 	{
 		return (E_INSUFFICIENT_TIME);
+	}
+	if (cfg.n_philosophers > MAX_PHILOS)
+	{
+		return (E_TOO_MANY_THREADS);
 	}
 	return (NO_ERROR);
 }
