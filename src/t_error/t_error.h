@@ -11,22 +11,21 @@
 /* ************************************************************************** */
 
 #ifndef T_ERROR_H
-# define T_ERROR_H
+#define T_ERROR_H
 
-typedef enum e_error
-{
-	NO_ERROR,
-	E_OOM,
-	E_PTHREAD_CREATE,
-	E_PTHREAD_JOIN,
-	E_MUTEX_INIT,
-	E_NOT_A_NUMBER,
-	E_OVERFLOW,
-	E_BADUSAGE,
-	E_INSUFFICIENT_TIME,
-	E_TOO_MANY_THREADS,
-}			t_error;
+typedef enum e_error {
+    NO_ERROR,
+    E_OOM,
+    E_PTHREAD_CREATE,
+    E_PTHREAD_JOIN,
+    E_MUTEX_INIT,
+    E_NOT_A_NUMBER,
+    E_OVERFLOW,
+    E_BADUSAGE,
+    E_INSUFFICIENT_TIME,
+    E_TOO_MANY_THREADS,
+} t_error;
 
-const char	*error_repr(t_error err);
+const char* error_repr(t_error err);
 
 #endif

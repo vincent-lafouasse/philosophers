@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #ifndef COOL_INTS_H
-# define COOL_INTS_H
+#define COOL_INTS_H
 
-# include <stdint.h>
+#include <stdint.h>
 
-typedef uint32_t	t_u32;
-typedef int32_t		t_i32;
+typedef uint32_t t_u32;
+typedef int32_t t_i32;
 
 #endif

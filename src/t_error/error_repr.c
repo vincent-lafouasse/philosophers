@@ -24,27 +24,26 @@
 
 #define E_TOO_MANY_THREADS_REPR "That's too many threads, are you crazy ??"
 
-const char	*error_repr(t_error err)
-{
-	if (err == NO_ERROR)
-		return (NO_ERROR_REPR);
-	if (err == E_OOM)
-		return (E_OOM_REPR);
-	if (err == E_PTHREAD_CREATE)
-		return (E_PTHREAD_CREATE_REPR);
-	if (err == E_PTHREAD_JOIN)
-		return (E_PTHREAD_JOIN_REPR);
-	if (err == E_NOT_A_NUMBER)
-		return (E_NOT_A_NUMBER_REPR);
-	if (err == E_OVERFLOW)
-		return (E_OVERFLOW_REPR);
-	if (err == E_BADUSAGE)
-		return (E_BADUSAGE_REPR);
-	if (err == E_MUTEX_INIT)
-		return (E_MUTEX_INIT_REPR);
-	if (err == E_INSUFFICIENT_TIME)
-		return (E_INSUFFICIENT_TIME_REPR);
-	if (err == E_TOO_MANY_THREADS)
-		return (E_TOO_MANY_THREADS_REPR);
-	return ("Unreachable");
+const char* error_repr(t_error err) {
+    if (err == NO_ERROR)
+        return (NO_ERROR_REPR);
+    if (err == E_OOM)
+        return (E_OOM_REPR);
+    if (err == E_PTHREAD_CREATE)
+        return (E_PTHREAD_CREATE_REPR);
+    if (err == E_PTHREAD_JOIN)
+        return (E_PTHREAD_JOIN_REPR);
+    if (err == E_NOT_A_NUMBER)
+        return (E_NOT_A_NUMBER_REPR);
+    if (err == E_OVERFLOW)
+        return (E_OVERFLOW_REPR);
+    if (err == E_BADUSAGE)
+        return (E_BADUSAGE_REPR);
+    if (err == E_MUTEX_INIT)
+        return (E_MUTEX_INIT_REPR);
+    if (err == E_INSUFFICIENT_TIME)
+        return (E_INSUFFICIENT_TIME_REPR);
+    if (err == E_TOO_MANY_THREADS)
+        return (E_TOO_MANY_THREADS_REPR);
+    return ("Unreachable");
 }
