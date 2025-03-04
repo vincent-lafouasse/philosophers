@@ -6,7 +6,7 @@
 /*   By: poss <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 19:08:22 by poss              #+#    #+#             */
-/*   Updated: 2025/01/22 19:17:37 by poss             ###   ########.fr       */
+/*   Updated: 2025/03/04 16:14:27 by poss             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ static void think(t_philosopher* self) {
     philosopher_set_state(self, FORK_HANDED1);
 }
 
+static void fork_handed_1(t_philosopher* self) {
+    pthread_mutex_lock(self->second_fork);
+    philosopher_set_state(self, FORK_HANDED2);
+}
+
 static void eat(t_philosopher* self) {
     checked_sleep(self->cfg.time_to_eat_ms * 1000);
     pthread_mutex_unlock(self->first_fork);
     pthread_mutex_unlock(self->second_fork);
     philosopher_set_state(self, SLEEPING);
-}
-
-static void fork_handed_1(t_philosopher* self) {
-    pthread_mutex_lock(self->second_fork);
-    philosopher_set_state(self, FORK_HANDED2);
 }
 
 static void sleep__(t_philosopher* self) {
